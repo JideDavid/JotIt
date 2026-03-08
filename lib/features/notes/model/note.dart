@@ -1,13 +1,10 @@
-
-import 'dart:ui';
-
 import 'package:hive/hive.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/constants/z_strings.dart';
-part 'note_model.g.dart';
+part 'note.g.dart';
 
 @HiveType(typeId: ZStrings.noteModelTypeId)
-class NoteModel {
+class Note {
   @HiveField(0)
   final String id;
   @HiveField(1)
@@ -17,13 +14,13 @@ class NoteModel {
   @HiveField(3)
   final DateTime timestamp;
   @HiveField(4)
-  final Color color;
+  final int color;
   @HiveField(5)
   final bool isLocked;
 
 
 
-  NoteModel({
+  Note({
     required this.id,
     required this.title,
     required this.body,
@@ -32,8 +29,8 @@ class NoteModel {
     required this.isLocked,
   });
 
-  factory NoteModel.fromJson(Map<String, dynamic> json) {
-    return NoteModel(
+  factory Note.fromJson(Map<String, dynamic> json) {
+    return Note(
       id: json['id'] ?? '',
       title: json['title'] ?? '',
       body: json['body'] ?? '',

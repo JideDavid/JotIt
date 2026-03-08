@@ -4,6 +4,18 @@ class ZColors {
   // Transparent
   static const Color transparent = Colors.transparent;
 
+  // Note colors
+  static const Color noteColor1 = Color(0xff333333);
+  static const Color noteColor2 = Color(0xff9a826c);
+  static const Color noteColor3 = Color(0xff808e48);
+  static const Color noteColor4 = Color(0xff4d9876);
+  static const Color noteColor5 = Color(0xff405d7e);
+  static const Color noteColor6 = Color(0xff794398);
+  static const Color noteColor7 = Color(0xffae2f81);
+  static const Color noteColor8 = Color(0xff77293f);
+  static const Color noteColor9 = Color(0xff752626);
+
+
   // App theme colors
   static const Color defaultNoteColor = Color(0xff333333);
   static const Color primary = Color(0xffffa600);

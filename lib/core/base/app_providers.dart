@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:jot_it/features/notes/repository/notes_repo.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import '../../features/auth/repository/auth_repository.dart';
@@ -13,7 +14,7 @@ class AppProviders {
 
   List<SingleChildWidget> get(Box<dynamic> authBox, Box<dynamic> noteBox){
 
-    final localStorage = HiveLocalStorageService(authBox,);
+    final localStorage = HiveLocalStorageService(authBox, noteBox);
     return [
       // core providers --------------------------------------------------
       Provider(create: (_) => MockAuthService()),
@@ -39,8 +40,10 @@ class AppProviders {
       ),
 
       // note providers --------------------------------------------------
+      Provider(create: (context) => NotesRepo(localStorageService: context.read<HiveLocalStorageService>())),
+    
       ChangeNotifierProvider(
-        create: (context) => NoteViewModel(),
+        create: (context) => NoteViewModel(notesRepo: context.read<NotesRepo>()),
       ),
 
     ];

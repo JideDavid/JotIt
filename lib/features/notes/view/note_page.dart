@@ -121,6 +121,25 @@ class _NotePageState extends State<NotePage> {
 
                 SizedBox(height: ZSizes.paddingSpaceLg),
 
+                // Color Picker
+                SizedBox(
+              width: SizeConfig.screenWidth,
+              height: SizeConfig.screenHeight * 0.1,
+              child: ListView.builder(
+                  scrollDirection: Axis.horizontal, itemCount: noteVM.colors.length, itemBuilder: (context, index){
+                return GestureDetector(
+                  onTap: (){
+                    noteVM.selectColor(index);
+                  },
+                  child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: ZSizes.paddingSpaceMd),
+                      child: Icon(Icons.circle, color: noteVM.colors[index],size: noteVM.selectedColor == index ? 50 : 30,)
+                  ),
+                );}),
+            ),
+
+                SizedBox(height: ZSizes.paddingSpaceLg),
+
                 // Title
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -196,3 +215,5 @@ class _NotePageState extends State<NotePage> {
     );
   }
 }
+
+

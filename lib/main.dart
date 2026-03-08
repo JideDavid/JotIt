@@ -8,7 +8,7 @@ import 'core/base/app_providers.dart';
 import 'core/constants/z_strings.dart';
 import 'core/theme/theme.dart';
 import 'features/auth/view/splash_screen.dart';
-import 'features/notes/model/note_model.dart';
+import 'features/notes/model/note.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +22,7 @@ void main() async{
 
   // Register Hive adapters ----------------------------------------------------
   Hive.registerAdapter(UserModelAdapter(),);
-  Hive.registerAdapter(NoteModelAdapter());
+  Hive.registerAdapter(NoteAdapter());
 
   // Open Boxes here -----------------------------------------------------------
   final authBox = await Hive.openBox(ZStrings.authBox);

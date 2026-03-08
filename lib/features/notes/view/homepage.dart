@@ -18,10 +18,18 @@ class Homepage extends StatefulWidget {
 int? selectedIndex;
 
 class _HomepageState extends State<Homepage> {
+
+  @override
+  void initState() {
+    super.initState();
+    // post frame callback
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      context.read<NoteViewModel>().getNotesFromLocalStorage();
+    });
+  }
   @override
   Widget build(BuildContext context) {
     final noteVM = context.watch<NoteViewModel>();
-
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: (){
@@ -96,7 +104,6 @@ class _HomepageState extends State<Homepage> {
                                 setState(() {
                                   selectedIndex = index;
                                 });
-                                ZPrint('long press');
                               },
                               child: Container(
                                 constraints: BoxConstraints(
@@ -104,7 +111,7 @@ class _HomepageState extends State<Homepage> {
                                 ),
                                 width: SizeConfig.screenWidth,
                                 decoration: BoxDecoration(
-                                  color: selectedIndex == index ? ZColors.error : ZColors.defaultNoteColor,
+                                  color: selectedIndex == index ? ZColors.error : noteVM.colors[note.color],
                                   borderRadius: BorderRadius.circular(ZSizes.borderRadiusMd),
                                 ),
                                 child: Padding(

@@ -1,4 +1,6 @@
 
+import 'package:jot_it/features/notes/model/note.dart';
+
 import '../../features/auth/model/user_model.dart';
 
 abstract class LocalStorageService {
@@ -9,6 +11,10 @@ abstract class LocalStorageService {
   Future<void> saveUser(UserModel user);
   UserModel? getUser();
   Future<void> deleteUser();
+
+  Future<void> saveNotes(List<Note> notes, String key);
+  List<Note> getNotes(String key);
+  Future<void> deleteNotes( String key );
 
   Future<void> clearAll();
 
