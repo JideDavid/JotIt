@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:jot_it/features/auth/view/login_page.dart';
 import 'package:jot_it/features/notes/view/homepage.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/constants/z_strings.dart';
+import '../../../core/services/google_auth_service.dart';
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -10,6 +12,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final GoogleAuthService _authService = GoogleAuthService();
 
   @override
   void initState() {
@@ -21,8 +24,15 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void _checkAuth() async{
     await Future.delayed(const Duration(seconds: 2));
-    // ignore: use_build_context_synchronously
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Homepage()));
+    final user = _authService.currentUser;
+    if(user == null){
+      // ignore: use_build_context_synchronously
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginPage()));
+    }
+    else {
+      // ignore: use_build_context_synchronously
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Homepage()));
+    }
   }
 
   @override

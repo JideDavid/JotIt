@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:jot_it/core/constants/colors.dart';
 import 'package:jot_it/features/notes/model/note.dart';
 import 'package:jot_it/features/notes/repository/notes_repo.dart';
+import 'package:jot_it/shared/widgets/z_snack_bar.dart';
 
 import '../../../core/utils/l_printer.dart';
 import '../../../core/utils/random_id_generator.dart';
@@ -63,7 +64,7 @@ class NoteViewModel extends ChangeNotifier {
     Navigator.push(context, MaterialPageRoute(builder: (context) => NotePage()));
   }
 
-  Future<void> saveNote() async {
+  Future<void> saveNote(BuildContext context) async {
     if(titleController.text.isEmpty && bodyController.text.isEmpty){
       return;
     }
@@ -86,6 +87,7 @@ class NoteViewModel extends ChangeNotifier {
       _allNotes = await updateLocalStorage(_allNotes, "all");
       notifyListeners();
       ZPrint('note updated for notifier');
+      ZSnackBar().success(context, "Note updated successfully");
     }
     else{
       Note note = Note(
@@ -100,6 +102,8 @@ class NoteViewModel extends ChangeNotifier {
       _allNotes = await updateLocalStorage(_allNotes, "all");
       notifyListeners();
       ZPrint('note saved for notifier');
+      // ignore: use
+      ZSnackBar().success(context, "Notes saved successfully");
     }
   }
 

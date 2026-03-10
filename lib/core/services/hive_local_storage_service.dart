@@ -59,6 +59,7 @@ class HiveLocalStorageService implements LocalStorageService {
   @override
   List<Note> getNotes(String key) {
     List<Note> notes = (_noteBox.get(key, defaultValue: []) as List).cast<Note>();
+    notes = notes.reversed.toList();
     ZPrint("Notes retrieved from local db: ${notes.length}");
     return notes;
   }

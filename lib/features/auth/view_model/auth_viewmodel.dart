@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../core/services/internet_checker_service.dart';
 import '../../../core/services/local_biometric_service.dart';
 import '../../../core/utils/l_printer.dart';
-import '../../../shared/widgets/lst_snack_bar.dart';
+import '../../../shared/widgets/z_snack_bar.dart';
 import '../../notes/view/homepage.dart';
 import '../model/user_model.dart';
 import '../repository/auth_repository.dart';
@@ -90,7 +90,7 @@ class AuthViewModel extends ChangeNotifier {
         _isLoading = false;
         notifyListeners();
         // ignore: use_build_context_synchronously
-        LSTSnackBar().error(context, "Login failed");
+        ZSnackBar().error(context, "Login failed");
         return;
       }
 
@@ -100,10 +100,10 @@ class AuthViewModel extends ChangeNotifier {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Homepage()));
 
       // ignore: use_build_context_synchronously
-      LSTSnackBar().success(context, "Login successful");
+      ZSnackBar().success(context, "Login successful");
     } catch (e) {
       // ignore: use_build_context_synchronously
-      LSTSnackBar().error(context, e.toString());
+      ZSnackBar().error(context, e.toString());
       ZPrint(e.toString());
     }
 
@@ -124,7 +124,7 @@ class AuthViewModel extends ChangeNotifier {
 
     if (pin.length == pinMaxLength){
       if (pin == "1234"){
-        LSTSnackBar().success(context, "Login successful");
+        ZSnackBar().success(context, "Login successful");
         getCurrentUser();
         Future.delayed(const Duration(seconds: 1), (){
           // ignore: use_build_context_synchronously
@@ -136,7 +136,7 @@ class AuthViewModel extends ChangeNotifier {
           _pin = "";
           notifyListeners();
           // ignore: use_build_context_synchronously
-          LSTSnackBar().error(context, "Incorrect pin");
+          ZSnackBar().error(context, "Incorrect pin");
         });
       }
     }
@@ -147,7 +147,7 @@ class AuthViewModel extends ChangeNotifier {
     if(resp){
       getCurrentUser();
       // ignore: use_build_context_synchronously
-      LSTSnackBar().success(context, "Login successful");
+      ZSnackBar().success(context, "Login successful");
       Future.delayed(const Duration(seconds: 1), (){
         // ignore: use_build_context_synchronously
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Homepage()));
@@ -188,7 +188,7 @@ class AuthViewModel extends ChangeNotifier {
       bool biometricAvailable = await localBiometricService.isBiometricAvailable();
       if(!biometricAvailable){
         // ignore: use_build_context_synchronously
-        LSTSnackBar().error(context, "Biometric not available");
+        ZSnackBar().error(context, "Biometric not available");
         return;
       }
     }

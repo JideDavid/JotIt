@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../core/constants/colors.dart';
 import '../../core/constants/sizes.dart';
 
-class LSTSnackBar{
+class ZSnackBar{
 
  void success(BuildContext context, String successMessage){
    ScaffoldMessenger.of(context).showSnackBar(

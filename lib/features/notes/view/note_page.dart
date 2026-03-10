@@ -62,7 +62,7 @@ class _NotePageState extends State<NotePage> {
             ),
             TextButton(
               onPressed: (){
-                Provider.of<NoteViewModel>(context, listen: false).saveNote();
+                Provider.of<NoteViewModel>(context, listen: false).saveNote(context);
                 Navigator.pop(context, true);},
               child: const Text("Save"),
             ),
@@ -111,7 +111,7 @@ class _NotePageState extends State<NotePage> {
                       Row(
                         children: [
                           ZIconButton(icon: Icons.save, action: () {
-                            noteVM.saveNote();
+                            noteVM.saveNote(context);
                           }),
                         ],
                       ),
