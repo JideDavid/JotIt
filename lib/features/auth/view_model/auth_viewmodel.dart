@@ -1,15 +1,12 @@
 import 'dart:async';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:jot_it/features/auth/view/login_page.dart';
 import '../../../core/services/internet_checker_service.dart';
 import '../../../core/services/local_biometric_service.dart';
-import '../../../core/utils/l_printer.dart';
 import '../../../shared/widgets/z_snack_bar.dart';
 import '../../notes/view/homepage.dart';
-import '../model/user_model.dart';
 import '../repository/auth_repository.dart';
-import '../view/email_login.dart';
-import '../view/pin_login.dart';
 
 class AuthViewModel extends ChangeNotifier {
   final AuthRepository authRepository;
@@ -28,124 +25,46 @@ class AuthViewModel extends ChangeNotifier {
     });
   }
 
-  final emailController = TextEditingController(text: "user@test.com");
-  final pinController = TextEditingController(text: "123456");
-  final formKey = GlobalKey<FormState>();
-
-  String _pin = '';
-  String get pin => _pin;
-  final int pinMaxLength = 4;
-
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  bool _obscurePin = true;
-  bool get obscurePin => _obscurePin;
-
-  UserModel? _currentUser;
-  UserModel? get currentUser => _currentUser;
+  User? _currentUser;
+  User? get currentUser => _currentUser;
 
   bool _isBiometricEnabled = false;
   bool get isBiometricEnabled => _isBiometricEnabled;
 
-
-  void togglePinVisibility() {
-    _obscurePin = !_obscurePin;
-    notifyListeners();
-  }
-
-  void backspacePin(){
-    if (_pin.isNotEmpty){
-      _pin = _pin.substring(0, _pin.length - 1);
-      notifyListeners();
-    }
-  }
-
   void routeRetuningUser(BuildContext context){
-    String? token = authRepository.getToken();
-    if(token != null){
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const PinLogin()));
+    _currentUser = authRepository.getCurrentUser();
+    notifyListeners();
+
+    checkBiometricEnabled();
+    if(_currentUser != null && !_isBiometricEnabled){
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Homepage()));
     }
     else{
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const EmailLogin()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginPage()));
     }
   }
 
-  Future<void> loginWithEmail(BuildContext context) async {
-    // validate form
-    if (!formKey.currentState!.validate()) {
-      return;
-    }
-
+  void loginWithGoogle(BuildContext context) async {
     _isLoading = true;
     notifyListeners();
-
-    try {
-      final resp = await authRepository.login(
-        email: emailController.text.trim(),
-        pin: pinController.text.trim(),
-      );
-
-      if (!resp) {
-        _isLoading = false;
-        notifyListeners();
+    User? user = await authRepository.signInWithGoogle();
+    if (user != null) {
+      _currentUser = user;
+      notifyListeners();
+      Navigator.pushReplacement(
         // ignore: use_build_context_synchronously
-        ZSnackBar().error(context, "Login failed");
-        return;
-      }
-
-      getCurrentUser();
-      // Navigate after success
-      // ignore: use_build_context_synchronously
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Homepage()));
-
-      // ignore: use_build_context_synchronously
-      ZSnackBar().success(context, "Login successful");
-    } catch (e) {
-      // ignore: use_build_context_synchronously
-      ZSnackBar().error(context, e.toString());
-      ZPrint(e.toString());
+          context, MaterialPageRoute(builder: (context) => const Homepage()));
     }
-
     _isLoading = false;
     notifyListeners();
-  }
-
-  void loginWithPin(BuildContext context, String input){
-
-    if (_pin.length == pinMaxLength){
-      return;
-    }
-
-    if (_pin.length < pinMaxLength){
-     _pin += input;
-      notifyListeners();
-    }
-
-    if (pin.length == pinMaxLength){
-      if (pin == "1234"){
-        ZSnackBar().success(context, "Login successful");
-        getCurrentUser();
-        Future.delayed(const Duration(seconds: 1), (){
-          // ignore: use_build_context_synchronously
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Homepage()));
-        });
-      }
-      else{
-        Future.delayed(const Duration(seconds: 1), () {
-          _pin = "";
-          notifyListeners();
-          // ignore: use_build_context_synchronously
-          ZSnackBar().error(context, "Incorrect pin");
-        });
-      }
-    }
   }
 
   void loginWithBiometrics(BuildContext context) async {
     bool resp = await authenticateWithBiometric();
     if(resp){
-      getCurrentUser();
       // ignore: use_build_context_synchronously
       ZSnackBar().success(context, "Login successful");
       Future.delayed(const Duration(seconds: 1), (){
@@ -164,12 +83,14 @@ class AuthViewModel extends ChangeNotifier {
 
   void logout(BuildContext context){
     // log user out
+    authRepository.signOut();
     // ignore: use_build_context_synchronously
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const EmailLogin()));
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const LoginPage()));
   }
 
   void getCurrentUser() {
-    _currentUser = authRepository.getCurrentUser();
+    User? user = authRepository.getCurrentUser();
+    _currentUser = user;
     notifyListeners();
   }
 
@@ -199,12 +120,4 @@ class AuthViewModel extends ChangeNotifier {
     }
   }
 
-
-
-  @override
-  void dispose() {
-    emailController.dispose();
-    pinController.dispose();
-    super.dispose();
-  }
 }

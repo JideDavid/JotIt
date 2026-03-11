@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:jot_it/core/services/google_auth_service.dart';
 import 'package:jot_it/features/notes/repository/notes_repo.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
@@ -8,7 +9,6 @@ import '../../features/notes/view-model/note_view_model.dart';
 import '../services/hive_local_storage_service.dart';
 import '../services/internet_checker_service.dart';
 import '../services/local_biometric_service.dart';
-import '../services/mock_auth_service.dart';
 
 class AppProviders {
 
@@ -17,7 +17,7 @@ class AppProviders {
     final localStorage = HiveLocalStorageService(authBox, noteBox);
     return [
       // core providers --------------------------------------------------
-      Provider(create: (_) => MockAuthService()),
+      Provider(create: (_) => GoogleAuthService()),
       Provider<HiveLocalStorageService>.value(value: localStorage),
       Provider(create: (_) => LocalBiometricService()),
       ChangeNotifierProvider(create: (_) => InternetCheckerService()),
@@ -27,7 +27,7 @@ class AppProviders {
       // auth providers --------------------------------------------------
       Provider(
         create: (context) =>
-            AuthRepository(authService: context.read<MockAuthService>(),
+            AuthRepository(authService: context.read<GoogleAuthService>(),
                 localStorageService: context.read<HiveLocalStorageService>()),
       ),
 

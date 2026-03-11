@@ -1,46 +1,29 @@
-import '../../../core/services/mock_auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:jot_it/core/services/google_auth_service.dart';
 import '../../../core/services/local_storage_service.dart';
 import '../../../core/utils/l_printer.dart';
-import '../model/user_model.dart';
 
 class AuthRepository {
-  final MockAuthService authService;
+  final GoogleAuthService authService;
   final LocalStorageService localStorageService;
 
   AuthRepository({required this.authService, required this.localStorageService});
 
-  Future<bool> login({
-    required String email,
-    required String pin,
-  }) async {
+  Future<User?> signInWithGoogle() async {
     try {
-      if (email.isEmpty || pin.isEmpty) {
-        return false;
-      }
-
-      final resp = await authService.login(email, pin);
-
-      final token = resp["token"];
-      final user = UserModel.fromJson(resp["user"]);
-
-      // Save to Hive
-      await localStorageService.saveToken(token);
-      await localStorageService.saveUser(user);
-
-      return true; // ✅ success
+     return await authService.signInWithGoogle();
     } catch (e) {
       ZPrint("Login error: $e");
-      return false;
+      return null;
     }
   }
 
-
-  String? getToken() {
-    return localStorageService.getToken();
+  void signOut(){
+    authService.signOut();
   }
 
-  UserModel? getCurrentUser(){
-    return localStorageService.getUser()!;
+  User? getCurrentUser(){
+    return authService.currentUser;
   }
 
   bool getBiometricEnabled(){
@@ -48,7 +31,7 @@ class AuthRepository {
 
   }
 
-  saveBiometricEnabled(bool enabled) async{
+  Future<void> saveBiometricEnabled(bool enabled) async{
     await localStorageService.saveBiometricEnabled(enabled);
   }
 

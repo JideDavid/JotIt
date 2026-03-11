@@ -1,46 +1,54 @@
 import 'package:flutter/material.dart';
-import '../../../core/services/google_auth_service.dart';
-import '../../../shared/widgets/z_snack_bar.dart';
-import '../../notes/view/homepage.dart';
+import 'package:jot_it/core/constants/colors.dart';
+import 'package:jot_it/features/auth/view_model/auth_viewmodel.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final GoogleAuthService _authService = GoogleAuthService();
-  bool _loading = false;
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: _loading
-            ? CircularProgressIndicator()
-            : ElevatedButton.icon(
-          icon: Icon(Icons.login),
-          label: Text("Sign in with Google"),
-          onPressed: () async {
-            setState(() {
-              _loading = true;
-            });
-            final user = await _authService.signInWithGoogle();
-            setState(() {
-              _loading = false;
-            });
-
-            if (user != null) {
-
-              // ignore: use_build_context_synchronously
-              ZSnackBar().success(context, 'Signed in as ${user.displayName}');
-              // ignore: use_build_context_synchronously
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Homepage()));
-            }
-          },
-        ),
+    final AuthViewModel authViewModel = context.watch<AuthViewModel>();
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        body: authViewModel.isLoading
+            ? Center(child: CircularProgressIndicator())
+            : Stack(
+                children: [
+                  authViewModel.currentUser == null
+                      ? Center(
+                          child: ElevatedButton.icon(
+                            icon: Icon(Icons.login),
+                            label: Text("Sign in with Google"),
+                            onPressed: () async {
+                              authViewModel.loginWithGoogle(context);
+                            },
+                          ),
+                        )
+                      : Center(
+                          child: IconButton(
+                            onPressed: !authViewModel.isBiometricEnabled
+                                ? null
+                                : () {
+                                    authViewModel.loginWithBiometrics(context);
+                                  },
+                            icon: Icon(
+                              Icons.fingerprint,
+                              size: 50,
+                              color: authViewModel.currentUser == null
+                                  ? ZColors.grey
+                                  : ZColors.primary,
+                            ),
+                          ),
+                        ),
+                ],
+              ),
       ),
     );
   }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:jot_it/features/auth/view/login_page.dart';
+import 'package:jot_it/features/auth/view_model/auth_viewmodel.dart';
 import 'package:jot_it/features/notes/view/homepage.dart';
+import 'package:provider/provider.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/constants/z_strings.dart';
 import '../../../core/services/google_auth_service.dart';
@@ -18,21 +20,8 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_){
-      _checkAuth();
+      Provider.of<AuthViewModel>(context, listen: false).routeRetuningUser(context);
     });
-  }
-
-  void _checkAuth() async{
-    await Future.delayed(const Duration(seconds: 2));
-    final user = _authService.currentUser;
-    if(user == null){
-      // ignore: use_build_context_synchronously
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginPage()));
-    }
-    else {
-      // ignore: use_build_context_synchronously
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Homepage()));
-    }
   }
 
   @override

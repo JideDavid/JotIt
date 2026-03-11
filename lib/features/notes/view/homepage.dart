@@ -6,6 +6,7 @@ import '../../../core/constants/colors.dart';
 import '../../../core/constants/sizes.dart';
 import '../../../core/utils/l_printer.dart';
 import '../../../shared/widgets/z_icon_button.dart';
+import '../../../views/settings_page.dart';
 import '../view-model/note_view_model.dart';
 
 class Homepage extends StatefulWidget {
@@ -61,8 +62,8 @@ class _HomepageState extends State<Homepage> {
                         }),
                         SizedBox(width: ZSizes.paddingSpaceMd,),
                         // info
-                        ZIconButton(icon: Icons.info_outline, action: (){
-                          ZPrint('info');
+                        ZIconButton(icon: Icons.settings, action: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=> const SettingsPage()));
                         }),
                       ],
                     )
