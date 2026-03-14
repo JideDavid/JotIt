@@ -11,6 +11,8 @@ class ZStrings {
   // -- Storage Keys
   static const String userKey = 'user';
   static const String biometricEnabledKey = 'biometric_enabled';
+  static const String appLockKey = 'app_lock_key';
+  static const String appLockPinKey = 'app_lock_pin_key';
   static const String tokenKey = 'token';
   static const String noteBoxKey = 'note_box_key';
 

@@ -22,4 +22,12 @@ abstract class LocalStorageService {
 
   bool getBiometricEnabled();
 
+  Future<void> saveAppLockChoice(bool choice);
+
+  bool getAppLockChoice();
+
+  Future<void> saveAppLockPin(String choice);
+
+  String getAppLockPin();
+
 }

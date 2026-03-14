@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:jot_it/core/constants/image_strings.dart';
+import 'package:jot_it/core/utils/date_time_helper.dart';
 import 'package:jot_it/core/utils/size_config.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/constants/sizes.dart';
-import '../../../core/utils/l_printer.dart';
 import '../../../shared/widgets/z_icon_button.dart';
 import '../../../views/settings_page.dart';
 import '../view-model/note_view_model.dart';
@@ -56,10 +56,6 @@ class _HomepageState extends State<Homepage> {
                     // leading icons
                     Row(
                       children: [
-                        // search
-                        ZIconButton(icon: Icons.search, action: (){
-                          ZPrint('search');
-                        }),
                         SizedBox(width: ZSizes.paddingSpaceMd,),
                         // info
                         ZIconButton(icon: Icons.settings, action: (){
@@ -69,6 +65,25 @@ class _HomepageState extends State<Homepage> {
                     )
                   ],
                 ),
+              ),
+
+              // Search input field
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: ZSizes.paddingSpaceLg),
+                child: TextField(
+                  controller: noteVM.searchController,
+                  onChanged: (val){
+                    noteVM.searchNotes();
+                  },
+                  decoration: InputDecoration(
+                    fillColor: ZColors.darkGrey,
+                    prefixIcon: Icon(Icons.search, color: ZColors.white,),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(ZSizes.borderRadiusXl),
+                      borderSide: BorderSide.none,
+                    )
+                  ),
+                )
               ),
 
               // Body
@@ -87,7 +102,9 @@ class _HomepageState extends State<Homepage> {
               ))
 
               // Note list
-              : Expanded(
+              :  noteVM.searchedNotes.isEmpty
+              //
+                  ? Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(top: ZSizes.paddingSpaceMd),
                   child: SingleChildScrollView(
@@ -118,30 +135,109 @@ class _HomepageState extends State<Homepage> {
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: ZSizes.paddingSpaceLg, vertical: ZSizes.paddingSpaceMd),
                                   child: selectedIndex == index
-                                  ? Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      ZIconButton(icon: Icons.delete, action: (){
-                                        noteVM.deleteNote(noteVM.allNotes[index].id);
-                                        setState(() {
-                                          selectedIndex = null;
-                                        });
-                                      }),
-                                      SizedBox(width: ZSizes.paddingSpaceMd,),
-                                      ZIconButton(icon: Icons.cancel, action: (){
-                                        setState(() {
-                                          selectedIndex = null;
-                                        });
-                                      })
-                                    ])
+                                      ? Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        ZIconButton(icon: Icons.delete, action: (){
+                                          noteVM.deleteNote(noteVM.allNotes[index].id);
+                                          setState(() {
+                                            selectedIndex = null;
+                                          });
+                                        }),
+                                        SizedBox(width: ZSizes.paddingSpaceMd,),
+                                        ZIconButton(icon: Icons.cancel, action: (){
+                                          setState(() {
+                                            selectedIndex = null;
+                                          });
+                                        })
+                                      ])
 
-                                  : Column(
+                                      : Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(note.title.isEmpty ? note.body : note.title,
-                                          style: TextStyle(fontSize: 20),
-                                        maxLines: 3,
+                                        style: TextStyle(fontSize: 20),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      Text("Updated: ${DateTimeHelper.formatToReadable(note.timestamp)}",
+                                        style: TextStyle(fontSize: 10,),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        })
+                      ],
+                    ),
+                  ),
+                ),
+              )
+              : Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: ZSizes.paddingSpaceMd),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        ...List.generate(noteVM.searchedNotes.length, (index) {
+                          final note = noteVM.searchedNotes[index];
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: ZSizes.paddingSpaceLg, vertical: ZSizes.paddingSpaceSm),
+                            child: GestureDetector(
+                              onTap: (){
+                                noteVM.openNote(context, note);
+                              },
+                              onLongPress: (){
+                                setState(() {
+                                  selectedIndex = index;
+                                });
+                              },
+                              child: Container(
+                                constraints: BoxConstraints(
+                                  minHeight: SizeConfig.screenHeight * 0.1,
+                                ),
+                                width: SizeConfig.screenWidth,
+                                decoration: BoxDecoration(
+                                  color: selectedIndex == index ? ZColors.error : noteVM.colors[note.color],
+                                  borderRadius: BorderRadius.circular(ZSizes.borderRadiusMd),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: ZSizes.paddingSpaceLg, vertical: ZSizes.paddingSpaceMd),
+                                  child: selectedIndex == index
+                                      ? Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        ZIconButton(icon: Icons.delete, action: (){
+                                          noteVM.deleteNote(noteVM.allNotes[index].id);
+                                          setState(() {
+                                            selectedIndex = null;
+                                          });
+                                        }),
+                                        SizedBox(width: ZSizes.paddingSpaceMd,),
+                                        ZIconButton(icon: Icons.cancel, action: (){
+                                          setState(() {
+                                            selectedIndex = null;
+                                          });
+                                        })
+                                      ])
+
+                                      : Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(note.title.isEmpty ? note.body : note.title,
+                                        style: TextStyle(fontSize: 20),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      Text("Updated: ${DateTimeHelper.formatToReadable(note.timestamp)}",
+                                        style: TextStyle(fontSize: 10,),
+                                        maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ],

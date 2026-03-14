@@ -35,4 +35,22 @@ class AuthRepository {
     await localStorageService.saveBiometricEnabled(enabled);
   }
 
+  bool getAppLockChoice(){
+    return localStorageService.getAppLockChoice();
+
+  }
+
+  Future<void> saveAppLockChoice(bool choice) async{
+    await localStorageService.saveAppLockChoice(choice);
+  }
+
+  String getAppLockPin(){
+    return localStorageService.getAppLockPin();
+
+  }
+
+  Future<void> saveAppLockPin(String pin) async{
+    await localStorageService.saveAppLockPin(pin);
+  }
+
 }

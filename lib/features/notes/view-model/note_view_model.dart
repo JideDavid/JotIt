@@ -4,7 +4,6 @@ import 'package:jot_it/core/constants/colors.dart';
 import 'package:jot_it/features/notes/model/note.dart';
 import 'package:jot_it/features/notes/repository/notes_repo.dart';
 import 'package:jot_it/shared/widgets/z_snack_bar.dart';
-
 import '../../../core/utils/l_printer.dart';
 import '../../../core/utils/random_id_generator.dart';
 import '../view/note_page.dart';
@@ -16,10 +15,13 @@ class NoteViewModel extends ChangeNotifier {
   List<Note> _allNotes = [];
   List<Note> get allNotes => _allNotes;
 
+  List<Note> _searchedNotes = [];
+  List<Note> get searchedNotes => _searchedNotes;
+
   Note? _openedNote;
   Note? get openedNote => _openedNote;
 
-
+  TextEditingController searchController = TextEditingController();
   TextEditingController titleController = TextEditingController();
   TextEditingController bodyController = TextEditingController();
   final List<Color> _colors = [
@@ -52,6 +54,14 @@ class NoteViewModel extends ChangeNotifier {
       notifyListeners();
     }
 
+  }
+
+  void searchNotes(){
+      _searchedNotes = _allNotes.where((note)
+          {return note.title.toLowerCase().contains(searchController.text.toLowerCase())
+          || note.body.toLowerCase().contains(searchController.text.toLowerCase());}).toList();
+      notifyListeners();
+      return;
   }
 
   void openNote(BuildContext context, Note? note){
@@ -87,6 +97,7 @@ class NoteViewModel extends ChangeNotifier {
       _allNotes = await updateLocalStorage(_allNotes, "all");
       notifyListeners();
       ZPrint('note updated for notifier');
+      // ignore : use_build_context_synchronously
       ZSnackBar().success(context, "Note updated successfully");
     }
     else{
@@ -102,7 +113,7 @@ class NoteViewModel extends ChangeNotifier {
       _allNotes = await updateLocalStorage(_allNotes, "all");
       notifyListeners();
       ZPrint('note saved for notifier');
-      // ignore: use
+      // ignore: use_build_context_synchronously
       ZSnackBar().success(context, "Notes saved successfully");
     }
   }
@@ -111,6 +122,7 @@ class NoteViewModel extends ChangeNotifier {
     Note? note = getNoteById(id);
     if(note == null) return;
     _allNotes.remove(note);
+    updateLocalStorage(_allNotes, "all");
     notifyListeners();
     ZPrint('note deleted');
   }

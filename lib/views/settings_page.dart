@@ -30,9 +30,64 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
       body: SizedBox(
           width: SizeConfig.screenWidth, height: SizeConfig.screenHeight,
-          child: Stack(
+          child: Column(
+            spacing: ZSizes.paddingSpaceMd,
             children: [
+
+              // App lock
               Padding(
+                padding: const EdgeInsets.symmetric(horizontal: ZSizes.paddingSpaceLg),
+                child: GestureDetector(
+                  onTap: (){
+                    authVM.toggleAppLockChoice(context);
+                  },
+                  child: Container(
+                    height: ZSizes.paddingSpaceXl * 2,
+                    decoration: BoxDecoration(
+                      color: ZColors.darkGrey,
+                      borderRadius: BorderRadius.circular(ZSizes.borderRadiusMd),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: ZSizes.paddingSpaceXl),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("App Lock", style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16
+                          ),),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: authVM.isAppLock ? ZColors.success.withAlpha((255 * 0.1).toInt())
+                                  : ZColors.error.withAlpha((255 * 0.1).toInt()),
+                              borderRadius: BorderRadius.circular(ZSizes.borderRadiusMd)
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: ZSizes.paddingSpaceLg,
+                              vertical: ZSizes.paddingSpaceSm),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.circle, color: authVM.isAppLock ? ZColors.success
+                                      : ZColors.error, size: 12,),
+                                  SizedBox(width: ZSizes.paddingSpaceLg,),
+                                  Text(authVM.isAppLock ? "Enabled" : "Disabled",
+                                    style: TextStyle(
+                                    color: authVM.isAppLock ? ZColors.success
+                                    : ZColors.error
+                                  ),),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+              // Biometric login
+              if(authVM.isAppLock)Padding(
                 padding: const EdgeInsets.symmetric(horizontal: ZSizes.paddingSpaceLg),
                 child: GestureDetector(
                   onTap: (){
@@ -49,33 +104,38 @@ class _SettingsPageState extends State<SettingsPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("Biometric Login"),
-                          Text(authVM.isBiometricEnabled ? "enabled" : "disabled",
-                            style: TextStyle(
-                            color: authVM.isBiometricEnabled ? ZColors.success
-                            : ZColors.error
+                          Text("Biometric Login", style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16
                           ),),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: authVM.isBiometricEnabled ? ZColors.success.withAlpha((255 * 0.1).toInt())
+                                  : ZColors.error.withAlpha((255 * 0.1).toInt()),
+                              borderRadius: BorderRadius.circular(ZSizes.borderRadiusMd)
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: ZSizes.paddingSpaceLg,
+                              vertical: ZSizes.paddingSpaceSm),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.circle, color: authVM.isBiometricEnabled ? ZColors.success
+                                      : ZColors.error, size: 12,),
+                                  SizedBox(width: ZSizes.paddingSpaceLg,),
+                                  Text(authVM.isBiometricEnabled ? "Enabled" : "Disabled",
+                                    style: TextStyle(
+                                    color: authVM.isBiometricEnabled ? ZColors.success
+                                    : ZColors.error
+                                  ),),
+                                ],
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
                   ),
                 ),
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(ZSizes.paddingSpaceLg),
-                    child: FilledButton(onPressed: (){
-                      authVM.logout(context);
-                    },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [Text("Logout")],
-                        )
-                    ),
-                  )
-                ],
               ),
             ],
           )),

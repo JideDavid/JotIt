@@ -79,12 +79,36 @@ class HiveLocalStorageService implements LocalStorageService {
   @override
   Future<void> saveBiometricEnabled(bool enabled) async{
     await _authBox.put(ZStrings.biometricEnabledKey, enabled);
-    ZPrint("Biometric enabled saved: $enabled}");
+    ZPrint("Biometric enabled saved as $enabled");
   }
 
   @override
   bool getBiometricEnabled() {
     final bool enabled = _authBox.get(ZStrings.biometricEnabledKey,defaultValue: false);
     return enabled;
+  }
+
+  @override
+  Future<void> saveAppLockChoice(bool choice) async{
+    await _authBox.put(ZStrings.appLockKey, choice);
+    ZPrint("App lock enabled saved as $choice");
+  }
+
+  @override
+  bool getAppLockChoice() {
+    final bool choice = _authBox.get(ZStrings.appLockKey, defaultValue: false);
+    return choice;
+  }
+
+  @override
+  Future<void> saveAppLockPin(String pin) async{
+    await _authBox.put(ZStrings.appLockPinKey, pin);
+    ZPrint("App lock pin saved as $pin");
+  }
+
+  @override
+  String getAppLockPin() {
+    final String pin = _authBox.get(ZStrings.appLockPinKey, defaultValue: "");
+    return pin;
   }
 }

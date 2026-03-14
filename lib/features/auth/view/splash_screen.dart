@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:jot_it/features/auth/view/login_page.dart';
 import 'package:jot_it/features/auth/view_model/auth_viewmodel.dart';
-import 'package:jot_it/features/notes/view/homepage.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/constants/z_strings.dart';
-import '../../../core/services/google_auth_service.dart';
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -14,13 +12,14 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  final GoogleAuthService _authService = GoogleAuthService();
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_){
-      Provider.of<AuthViewModel>(context, listen: false).routeRetuningUser(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) async{
+      await Future.delayed(Duration(seconds: 2));
+      //ignore: use_build_context_synchronously
+      Provider.of<AuthViewModel>(context, listen: false).routeToHomepage(context);
     });
   }
 
@@ -61,6 +60,7 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
             ],
           ),
-        ));
+        )
+    );
   }
 }
