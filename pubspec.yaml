@@ -30,23 +30,33 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   provider: ^6.1.5+1
+  http: ^1.6.0
   hive: ^2.2.3
   hive_flutter: ^1.1.0
+  cryptography: ^2.9.0
   local_auth: ^2.3.0
   local_auth_android: ^1.0.43
-  intl: ^0.19.0
+  intl: ^0.20.2
+  flutter_quill: ^11.6.0
+  url_launcher: ^6.3.3
+  file_picker: 10.3.10
+  audioplayers: 6.5.1
+  record: 6.1.2
   mobile_scanner: ^5.0.0
   connectivity_plus: ^7.0.0
   internet_connection_checker_plus: ^2.9.1+2
   firebase_core: ^4.5.0
   firebase_auth: ^6.2.0
   google_sign_in: ^6.1.0
-
+  firebase_ai: ^4.0.0
+  firebase_app_check: ^0.4.9
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -75,6 +85,60 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/branding/jotit-symbol.png
+    - assets/fonts/licenses/
+
+  fonts:
+    - family: Anton
+      fonts:
+        - asset: assets/fonts/Anton-Regular.ttf
+    - family: Archivo Black
+      fonts:
+        - asset: assets/fonts/ArchivoBlack-Regular.ttf
+    - family: Bungee
+      fonts:
+        - asset: assets/fonts/Bungee-Regular.ttf
+    - family: Caveat
+      fonts:
+        - asset: assets/fonts/Caveat-Regular.ttf
+        - asset: assets/fonts/Caveat-Bold.ttf
+          weight: 700
+    - family: DM Sans
+      fonts:
+        - asset: assets/fonts/DMSans-Regular.ttf
+        - asset: assets/fonts/DMSans-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/DMSans-Italic.ttf
+          style: italic
+        - asset: assets/fonts/DMSans-BoldItalic.ttf
+          weight: 700
+          style: italic
+    - family: DM Serif Display
+      fonts:
+        - asset: assets/fonts/DMSerifDisplay-Regular.ttf
+        - asset: assets/fonts/DMSerifDisplay-Italic.ttf
+          style: italic
+    - family: Lobster
+      fonts:
+        - asset: assets/fonts/Lobster-Regular.ttf
+    - family: Playfair Display
+      fonts:
+        - asset: assets/fonts/PlayfairDisplay-Regular.ttf
+        - asset: assets/fonts/PlayfairDisplay-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/PlayfairDisplay-Italic.ttf
+          style: italic
+        - asset: assets/fonts/PlayfairDisplay-BoldItalic.ttf
+          weight: 700
+          style: italic
+    - family: Righteous
+      fonts:
+        - asset: assets/fonts/Righteous-Regular.ttf
+    - family: Space Grotesk
+      fonts:
+        - asset: assets/fonts/SpaceGrotesk-Regular.ttf
+        - asset: assets/fonts/SpaceGrotesk-Bold.ttf
+          weight: 700
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

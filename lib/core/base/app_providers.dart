@@ -9,43 +9,52 @@ import '../../features/notes/view-model/note_view_model.dart';
 import '../services/hive_local_storage_service.dart';
 import '../services/internet_checker_service.dart';
 import '../services/local_biometric_service.dart';
+import '../theme/appearance_view_model.dart';
 
 class AppProviders {
-
-  List<SingleChildWidget> get(Box<dynamic> authBox, Box<dynamic> noteBox){
-
+  List<SingleChildWidget> get(
+    Box<dynamic> authBox,
+    Box<dynamic> noteBox, {
+    required AppearanceViewModel appearance,
+    required GoogleAuthService accountService,
+  }) {
     final localStorage = HiveLocalStorageService(authBox, noteBox);
     return [
+      ChangeNotifierProvider.value(value: appearance),
       // core providers --------------------------------------------------
-      Provider(create: (_) => GoogleAuthService()),
+      Provider<GoogleAuthService>.value(value: accountService),
       Provider<HiveLocalStorageService>.value(value: localStorage),
       Provider(create: (_) => LocalBiometricService()),
       ChangeNotifierProvider(create: (_) => InternetCheckerService()),
 
-
       // feature provider
       // auth providers --------------------------------------------------
       Provider(
-        create: (context) =>
-            AuthRepository(authService: context.read<GoogleAuthService>(),
-                localStorageService: context.read<HiveLocalStorageService>()),
+        create: (context) => AuthRepository(
+          authService: context.read<GoogleAuthService>(),
+          localStorageService: context.read<HiveLocalStorageService>(),
+        ),
       ),
 
       ChangeNotifierProvider(
         create: (context) => AuthViewModel(
-            authRepository: context.read<AuthRepository>(),
-            localBiometricService: context.read<LocalBiometricService>(),
-            internetCheckerService: context.read<InternetCheckerService>(),
+          authRepository: context.read<AuthRepository>(),
+          localBiometricService: context.read<LocalBiometricService>(),
+          internetCheckerService: context.read<InternetCheckerService>(),
         ),
       ),
 
       // note providers --------------------------------------------------
-      Provider(create: (context) => NotesRepo(localStorageService: context.read<HiveLocalStorageService>())),
-    
-      ChangeNotifierProvider(
-        create: (context) => NoteViewModel(notesRepo: context.read<NotesRepo>()),
+      Provider(
+        create: (context) => NotesRepo(
+          localStorageService: context.read<HiveLocalStorageService>(),
+        ),
       ),
 
+      ChangeNotifierProvider(
+        create: (context) =>
+            NoteViewModel(notesRepo: context.read<NotesRepo>()),
+      ),
     ];
   }
 }

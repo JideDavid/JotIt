@@ -1,56 +1,51 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:jot_it/core/services/google_auth_service.dart';
 import '../../../core/services/local_storage_service.dart';
-import '../../../core/utils/l_printer.dart';
 
 class AuthRepository {
   final GoogleAuthService authService;
   final LocalStorageService localStorageService;
 
-  AuthRepository({required this.authService, required this.localStorageService});
+  AuthRepository({
+    required this.authService,
+    required this.localStorageService,
+  });
 
-  Future<User?> signInWithGoogle() async {
-    try {
-     return await authService.signInWithGoogle();
-    } catch (e) {
-      ZPrint("Login error: $e");
-      return null;
-    }
+  bool get isAccountAvailable => authService.isAvailable;
+  String? get accountUnavailableReason => authService.unavailableReason;
+  Stream<User?> get userChanges => authService.userChanges;
+
+  Future<User?> signInWithGoogle() => authService.signInWithGoogle();
+
+  Future<void> signOut() async {
+    await authService.signOut();
   }
 
-  void signOut(){
-    authService.signOut();
-  }
-
-  User? getCurrentUser(){
+  User? getCurrentUser() {
     return authService.currentUser;
   }
 
-  bool getBiometricEnabled(){
+  bool getBiometricEnabled() {
     return localStorageService.getBiometricEnabled();
-
   }
 
-  Future<void> saveBiometricEnabled(bool enabled) async{
+  Future<void> saveBiometricEnabled(bool enabled) async {
     await localStorageService.saveBiometricEnabled(enabled);
   }
 
-  bool getAppLockChoice(){
+  bool getAppLockChoice() {
     return localStorageService.getAppLockChoice();
-
   }
 
-  Future<void> saveAppLockChoice(bool choice) async{
+  Future<void> saveAppLockChoice(bool choice) async {
     await localStorageService.saveAppLockChoice(choice);
   }
 
-  String getAppLockPin(){
-    return localStorageService.getAppLockPin();
-
+  Future<bool> verifyAppLockPin(String pin) {
+    return localStorageService.verifyAppLockPin(pin);
   }
 
-  Future<void> saveAppLockPin(String pin) async{
+  Future<void> saveAppLockPin(String pin) async {
     await localStorageService.saveAppLockPin(pin);
   }
-
 }

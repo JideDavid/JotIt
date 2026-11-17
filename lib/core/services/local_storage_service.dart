@@ -1,9 +1,16 @@
-
 import 'package:jot_it/features/notes/model/note.dart';
 
 import '../../features/auth/model/user_model.dart';
 
 abstract class LocalStorageService {
+  String? getAppearance();
+  Future<void> saveAppearance(String mode);
+  List<int> getFavoriteNoteColors();
+  Future<void> saveFavoriteNoteColors(List<int> colors);
+  List<String> getSavedTextStyles();
+  Future<void> saveTextStyles(List<String> ids);
+  bool hasExistingData();
+
   Future<void> saveToken(String token);
   String? getToken();
   Future<void> deleteToken();
@@ -14,7 +21,7 @@ abstract class LocalStorageService {
 
   Future<void> saveNotes(List<Note> notes, String key);
   List<Note> getNotes(String key);
-  Future<void> deleteNotes( String key );
+  Future<void> deleteNotes(String key);
 
   Future<void> clearAll();
 
@@ -28,6 +35,11 @@ abstract class LocalStorageService {
 
   Future<void> saveAppLockPin(String choice);
 
-  String getAppLockPin();
+  Future<bool> verifyAppLockPin(String pin);
 
+  bool hasNoteLockPin();
+
+  Future<void> createNoteLockPin(String pin);
+
+  Future<bool> verifyNoteLockPin(String pin);
 }

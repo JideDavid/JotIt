@@ -10,10 +10,9 @@ class InternetCheckerService extends ChangeNotifier {
 
   late StreamSubscription _subscription;
 
-  final StreamController<bool> _connectionStatusController = StreamController<bool>.broadcast();
+  final StreamController<bool> _connectionStatusController =
+      StreamController<bool>.broadcast();
   Stream<bool> get connectionStatusStream => _connectionStatusController.stream;
-
-
 
   InternetCheckerService() {
     _subscription = InternetConnection().onStatusChange.listen((status) {
@@ -32,6 +31,7 @@ class InternetCheckerService extends ChangeNotifier {
   @override
   void dispose() {
     _subscription.cancel();
+    _connectionStatusController.close();
     super.dispose();
   }
 }

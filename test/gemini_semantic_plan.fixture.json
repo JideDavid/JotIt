@@ -1,0 +1,527 @@
+{
+  "text": "A practical learning roadmap\nUse a sustainable pace and review what you learn.\n\n1. Learning topic 1\nPractice a small example.\nResources:\nReference guide\nPractice workbook\n\n2. Learning topic 2\nPractice a small example.\nResources:\nReference guide\nPractice workbook\n\n3. Learning topic 3\nPractice a small example.\nResources:\nReference guide\nPractice workbook\n\n4. Learning topic 4\nPractice a small example.\nResources:\nReference guide\nPractice workbook\n\n5. Learning topic 5\nPractice a small example.\nResources:\nReference guide\nPractice workbook\n\n6. Learning topic 6\nPractice a small example.\nResources:\nReference guide\nPractice workbook\n\n7. Learning topic 7\nPractice a small example.\nResources:\nReference guide\nPractice workbook\n\n8. Learning topic 8\nPractice a small example.\nResources:\nReference guide\nPractice workbook\n\n9. Learning topic 9\nPractice a small example.\nResources:\nReference guide\nPractice workbook\n\n10. Learning topic 10\nPractice a small example.\nResources:\nReference guide\nPractice workbook\n\n11. Learning topic 11\nPractice a small example.\nResources:\nReference guide\nPractice workbook\n\n12. Learning topic 12\nPractice a small example.\nResources:\nReference guide\nPractice workbook\n\n13. Learning topic 13\nPractice a small example.\nResources:\nReference guide\nPractice workbook\n\n14. Learning topic 14\nPractice a small example.\nResources:\nReference guide\nPractice workbook",
+  "plan": {
+    "summary": "Formatted the learning roadmap consistently by assigning native title, section, body, and bullet roles, highlighting key phrases, and adding a star doodle.",
+    "title": "A practical learning roadmap",
+    "edits": [
+      {
+        "kind": "paragraph",
+        "start": 0,
+        "length": 28,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "title"
+      },
+      {
+        "kind": "style",
+        "start": 35,
+        "length": 16,
+        "styleId": "lemon-marker",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false
+      },
+      {
+        "kind": "paragraph",
+        "start": 80,
+        "length": 19,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "section"
+      },
+      {
+        "kind": "paragraph",
+        "start": 137,
+        "length": 15,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "bullet"
+      },
+      {
+        "kind": "paragraph",
+        "start": 153,
+        "length": 17,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "bullet"
+      },
+      {
+        "kind": "paragraph",
+        "start": 172,
+        "length": 19,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "section"
+      },
+      {
+        "kind": "paragraph",
+        "start": 229,
+        "length": 15,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "bullet"
+      },
+      {
+        "kind": "paragraph",
+        "start": 245,
+        "length": 17,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "bullet"
+      },
+      {
+        "kind": "paragraph",
+        "start": 264,
+        "length": 19,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "section"
+      },
+      {
+        "kind": "paragraph",
+        "start": 321,
+        "length": 15,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "bullet"
+      },
+      {
+        "kind": "paragraph",
+        "start": 337,
+        "length": 17,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "bullet"
+      },
+      {
+        "kind": "paragraph",
+        "start": 356,
+        "length": 19,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "section"
+      },
+      {
+        "kind": "paragraph",
+        "start": 413,
+        "length": 15,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "bullet"
+      },
+      {
+        "kind": "paragraph",
+        "start": 429,
+        "length": 17,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "bullet"
+      },
+      {
+        "kind": "paragraph",
+        "start": 448,
+        "length": 19,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "section"
+      },
+      {
+        "kind": "paragraph",
+        "start": 505,
+        "length": 15,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "bullet"
+      },
+      {
+        "kind": "paragraph",
+        "start": 521,
+        "length": 17,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "bullet"
+      },
+      {
+        "kind": "paragraph",
+        "start": 540,
+        "length": 19,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "section"
+      },
+      {
+        "kind": "paragraph",
+        "start": 597,
+        "length": 15,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "bullet"
+      },
+      {
+        "kind": "paragraph",
+        "start": 613,
+        "length": 17,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "bullet"
+      },
+      {
+        "kind": "paragraph",
+        "start": 632,
+        "length": 19,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "section"
+      },
+      {
+        "kind": "paragraph",
+        "start": 689,
+        "length": 15,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "bullet"
+      },
+      {
+        "kind": "paragraph",
+        "start": 705,
+        "length": 17,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "bullet"
+      },
+      {
+        "kind": "paragraph",
+        "start": 724,
+        "length": 19,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "section"
+      },
+      {
+        "kind": "paragraph",
+        "start": 781,
+        "length": 15,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "bullet"
+      },
+      {
+        "kind": "paragraph",
+        "start": 797,
+        "length": 17,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "bullet"
+      },
+      {
+        "kind": "paragraph",
+        "start": 816,
+        "length": 19,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "section"
+      },
+      {
+        "kind": "paragraph",
+        "start": 873,
+        "length": 15,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "bullet"
+      },
+      {
+        "kind": "paragraph",
+        "start": 889,
+        "length": 17,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "bullet"
+      },
+      {
+        "kind": "paragraph",
+        "start": 908,
+        "length": 21,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "section"
+      },
+      {
+        "kind": "paragraph",
+        "start": 967,
+        "length": 15,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "bullet"
+      },
+      {
+        "kind": "paragraph",
+        "start": 983,
+        "length": 17,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "bullet"
+      },
+      {
+        "kind": "paragraph",
+        "start": 1002,
+        "length": 21,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "section"
+      },
+      {
+        "kind": "paragraph",
+        "start": 1061,
+        "length": 15,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "bullet"
+      },
+      {
+        "kind": "paragraph",
+        "start": 1077,
+        "length": 17,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "bullet"
+      },
+      {
+        "kind": "paragraph",
+        "start": 1096,
+        "length": 21,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "section"
+      },
+      {
+        "kind": "paragraph",
+        "start": 1155,
+        "length": 15,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "bullet"
+      },
+      {
+        "kind": "paragraph",
+        "start": 1171,
+        "length": 17,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "bullet"
+      },
+      {
+        "kind": "paragraph",
+        "start": 1190,
+        "length": 21,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "section"
+      },
+      {
+        "kind": "paragraph",
+        "start": 1249,
+        "length": 15,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "bullet"
+      },
+      {
+        "kind": "paragraph",
+        "start": 1265,
+        "length": 17,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "bullet"
+      },
+      {
+        "kind": "paragraph",
+        "start": 1284,
+        "length": 21,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "section"
+      },
+      {
+        "kind": "style",
+        "start": 1317,
+        "length": 13,
+        "styleId": "amber-brush",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false
+      },
+      {
+        "kind": "paragraph",
+        "start": 1343,
+        "length": 15,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "bullet"
+      },
+      {
+        "kind": "paragraph",
+        "start": 1359,
+        "length": 17,
+        "styleId": "",
+        "color": "",
+        "blocks": [],
+        "inlineOnly": true,
+        "reset": false,
+        "role": "bullet"
+      },
+      {
+        "kind": "insert",
+        "start": 1376,
+        "length": 0,
+        "styleId": "",
+        "color": "",
+        "blocks": [
+          {
+            "type": "doodle",
+            "text": "star",
+            "formatId": "star",
+            "body": ""
+          }
+        ],
+        "inlineOnly": true,
+        "reset": false
+      }
+    ],
+    "design": "Clean, structured dark mode layout with clear headings and bulleted resources.",
+    "warnings": [],
+    "changes": [
+      "43 paragraph roles",
+      "2 text styles",
+      "1 insertions"
+    ],
+    "anchored": true
+  }
+}

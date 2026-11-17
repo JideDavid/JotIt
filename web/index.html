@@ -17,22 +17,44 @@
   <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description" content="A note taking app">
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="jot_it">
+  <meta name="apple-mobile-web-app-title" content="JotIt">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="icon" type="image/png" href="favicon.png?v=jotit-purple-j"/>
 
-  <title>jot_it</title>
+  <title>JotIt</title>
   <link rel="manifest" href="manifest.json">
+  <style>
+    :root { color-scheme: light dark; }
+    :root[data-appearance="light"] { color-scheme: light; }
+    :root[data-appearance="dark"] { color-scheme: dark; }
+    html, body { margin: 0; height: 100%; background: light-dark(#f7f5f0, #17191c); color: light-dark(#23262b, #f3f1eb); }
+    #startup { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; padding: 24px; font: 16px/1.5 system-ui, sans-serif; text-align: center; }
+    #startup[hidden] { display: none; }
+    #startup h1 { display: flex; align-items: center; justify-content: center; gap: 12px; font-size: 32px; font-weight: 800; letter-spacing: -0.6px; margin: 0 0 12px; }
+    #startup h1 img { width: 40px; height: 40px; object-fit: contain; }
+    #startup p { max-width: 360px; color: light-dark(#62666c, #b2b5ba); }
+    #startup button { min-height: 48px; padding: 10px 20px; border: 0; border-radius: 12px; background: #f5b840; color: #2b210f; font: inherit; cursor: pointer; }
+  </style>
 </head>
 <body>
+  <div id="startup" role="status" aria-live="polite">
+    <div>
+      <h1><img src="icons/jotit-symbol.png" alt="" width="40" height="40">JotIt</h1>
+      <p id="startup-message">Loading your notes…</p>
+      <button id="startup-retry" type="button" hidden>Try again</button>
+      <noscript><p>Enable JavaScript to open JotIt.</p></noscript>
+    </div>
+  </div>
+  <script src="startup.js"></script>
   <!--
     You can customize the "flutter_bootstrap.js" script.
     This is useful to provide a custom configuration to the Flutter loader
@@ -41,6 +63,6 @@
     For more details:
     * https://docs.flutter.dev/platform-integration/web/initialization
   -->
-  <script src="flutter_bootstrap.js" async></script>
+  <script>{{flutter_bootstrap_js}}</script>
 </body>
 </html>

@@ -1,0 +1,7 @@
+# Only runtime sources and dependency manifests enter the build context.
+**
+!Dockerfile
+!package.json
+!package-lock.json
+!server.mjs
+!semantic-plan.mjs

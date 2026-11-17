@@ -1,169 +1,148 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../core/constants/colors.dart';
-import '../../../core/constants/sizes.dart';
+import '../../../shared/widgets/quiet_chrome.dart';
 import '../view_model/auth_viewmodel.dart';
 
-class PinLogin extends StatefulWidget {
+class PinLogin extends StatelessWidget {
   const PinLogin({super.key});
-
-  @override
-  State<PinLogin> createState() => _PinLoginState();
-}
-
-class _PinLoginState extends State<PinLogin> {
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<AuthViewModel>().checkBiometricEnabled();
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     final authVM = context.watch<AuthViewModel>();
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Stone School Bus App text
-            const Text(
-              "JotIt",
-              style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.w900,
-                  color: ZColors.primary),
-            ),
-
-            const SizedBox(
-              height: ZSizes.paddingSpaceXl,
-            ),
-
-            // Enter security Pin text
-            const Text(
-              "ENTER SECURITY PIN",
-              style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w900,
-                  color: ZColors.grey),
-            ),
-
-            const SizedBox(
-              height: ZSizes.paddingSpaceXl,
-            ),
-
-            // input count feedback
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(
-                4,
-                (index) => Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Icon(
-                    Icons.circle,
-                    size: 20,
-                    color: authVM.pin.length >= index + 1
-                        ? ZColors.primary
-                        : ZColors.grey,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final compact = constraints.maxHeight < 700;
+            final spacing = compact ? 12.0 : 24.0;
+            final width = (constraints.maxWidth - 32).clamp(0.0, 340.0);
+            final keyHeight = (constraints.maxHeight * .105).clamp(48.0, 76.0);
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: SizedBox(
+                    width: width,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const JotWordmark(),
+                        SizedBox(height: spacing),
+                        Text(
+                          'Unlock JotIt',
+                          style: theme.textTheme.headlineLarge,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Enter your app PIN to continue.',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: scheme.onSurfaceVariant,
+                          ),
+                        ),
+                        SizedBox(height: spacing),
+                        Semantics(
+                          label:
+                              '${authVM.pin.length} of four app PIN digits entered',
+                          excludeSemantics: true,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: List.generate(4, (index) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                ),
+                                child: Icon(
+                                  Icons.circle,
+                                  size: 20,
+                                  color: authVM.pin.length > index
+                                      ? scheme.primary
+                                      : scheme.outline,
+                                ),
+                              );
+                            }),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        if (authVM.lockError != null)
+                          Text(
+                            authVM.lockError!,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: scheme.error),
+                          ),
+                        if (authVM.isAuthenticating)
+                          const Padding(
+                            padding: EdgeInsets.all(8),
+                            child: CircularProgressIndicator(),
+                          ),
+                        SizedBox(height: spacing),
+                        GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                mainAxisExtent: keyHeight,
+                                mainAxisSpacing: compact ? 8 : 12,
+                                crossAxisSpacing: 12,
+                              ),
+                          itemCount: 12,
+                          itemBuilder: (context, index) {
+                            if (index == 9) {
+                              return IconButton(
+                                tooltip: 'Unlock with biometrics',
+                                onPressed:
+                                    authVM.isBiometricEnabled &&
+                                        !authVM.isAuthenticating
+                                    ? authVM.loginWithBiometrics
+                                    : null,
+                                icon: const Icon(Icons.fingerprint, size: 40),
+                              );
+                            }
+                            if (index == 11) {
+                              return IconButton(
+                                tooltip: 'Delete PIN digit',
+                                onPressed: authVM.isAuthenticating
+                                    ? null
+                                    : authVM.backspacePin,
+                                icon: const Icon(Icons.backspace),
+                              );
+                            }
+                            final digit = index == 10 ? '0' : '${index + 1}';
+                            return TextButton(
+                              onPressed: authVM.isAuthenticating
+                                  ? null
+                                  : () => authVM.unlockWithPin(digit),
+                              style: TextButton.styleFrom(
+                                backgroundColor: scheme.surface,
+                                shape: const CircleBorder(),
+                                side: BorderSide(color: scheme.outlineVariant),
+                              ),
+                              child: Text(
+                                digit,
+                                style: TextStyle(
+                                  fontSize: 30,
+                                  color: scheme.onSurface,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        SizedBox(height: spacing),
+                        Text(
+                          'Your app PIN is separate from your shared note PIN.',
+                          textAlign: TextAlign.center,
+                          style: theme.textTheme.bodySmall,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-
-            const SizedBox(
-              height: ZSizes.paddingSpaceXl,
-            ),
-
-            // input buttons
-            ConstrainedBox(
-              constraints: const BoxConstraints(
-                minHeight: 300, // 👈 minimum height
-              ),
-              child: GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: ZSizes.paddingSpaceLg * 3,
-                ),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 25,
-                  mainAxisSpacing: 25,
-                ),
-                itemCount: 12,
-                itemBuilder: (context, index) {
-                  return index < 9 || index == 10
-                      // Number button
-                      ? TextButton(
-                          onPressed: () {
-                            if (index < 9) {
-                              authVM.unlockWithPin(context, '${index + 1}');
-                            } else {
-                              authVM.unlockWithPin(context, '0');
-                            }
-                          },
-                          style: const ButtonStyle(
-                              backgroundColor:
-                                  WidgetStatePropertyAll(ZColors.darkGrey)),
-                          child: Text(
-                            '${index < 9 ? index + 1 : 0}',
-                            style: const TextStyle(
-                                fontSize: 30, color: ZColors.lightGrey),
-                          ))
-                      // Bio ID button
-                      : index == 9
-                          ? Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                IconButton(
-                                    style: ButtonStyle(
-                                      backgroundColor: const WidgetStatePropertyAll(
-                                              ZColors.darkGrey),
-                                    ),
-                                    onPressed: !authVM.isBiometricEnabled
-                                        ? null
-                                        : (){
-                                            authVM.loginWithBiometrics(context);
-                                          },
-                                    icon: Icon(
-                                      Icons.fingerprint,
-                                      color: authVM.isBiometricEnabled
-                                          ? ZColors.primary
-                                          : ZColors.grey,
-                                      size: 40,
-                                    )),
-                                const Text("Bio-ID", style: TextStyle(
-                                  color: ZColors.lightGrey
-                                ),)
-                              ],
-                            )
-                          // Backspace button
-                          : IconButton(
-                              onPressed: () {
-                                authVM.backspacePin();
-                              },
-                              icon: const Icon(Icons.backspace));
-                },
-              ),
-            ),
-
-            const SizedBox(
-              height: ZSizes.paddingSpaceXl,
-            ),
-
-            // forgot pin text
-            const Text(
-              "Forgot Your PIN Code?",
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: ZColors.grey),
-            )
-          ],
+            );
+          },
         ),
       ),
     );

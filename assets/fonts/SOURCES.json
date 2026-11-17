@@ -1,0 +1,157 @@
+{
+  "stylesheet": "https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bungee&family=Caveat:wght@400;700&family=DM+Sans:ital,wght@0,400;0,700;1,400;1,700&family=DM+Serif+Display:ital@0;1&family=Lobster&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Righteous&family=Space+Grotesk:wght@400;700&display=swap",
+  "fonts": [
+    {
+      "family": "Anton",
+      "weight": 400,
+      "italic": false,
+      "file": "Anton-Regular.ttf",
+      "source": "https://fonts.gstatic.com/s/anton/v27/1Ptgg87LROyAm0K0.ttf",
+      "sha256": "fd9301f2837c99df2be07cc7f0be66e9470f5354d8fcf1606027c67fcd637a53"
+    },
+    {
+      "family": "Archivo Black",
+      "weight": 400,
+      "italic": false,
+      "file": "ArchivoBlack-Regular.ttf",
+      "source": "https://fonts.gstatic.com/s/archivoblack/v23/HTxqL289NzCGg4MzN6KJ7eW6OYs.ttf",
+      "sha256": "355b89d43e95edd50a58dad2029689c56027ef19cf9f2f03c9d3605e87ee182e"
+    },
+    {
+      "family": "Bungee",
+      "weight": 400,
+      "italic": false,
+      "file": "Bungee-Regular.ttf",
+      "source": "https://fonts.gstatic.com/s/bungee/v17/N0bU2SZBIuF2PU_ECg.ttf",
+      "sha256": "ff0ad5d7496a911460625f9052ea50b05e289065be71a1cb21c71896585224d2"
+    },
+    {
+      "family": "Caveat",
+      "weight": 400,
+      "italic": false,
+      "file": "Caveat-Regular.ttf",
+      "source": "https://fonts.gstatic.com/s/caveat/v23/WnznHAc5bAfYB2QRah7pcpNvOx-pjfJ9SII.ttf",
+      "sha256": "012f33f9814bf9614973983335c3a375fe267c094e7c09a02a276cd1dcd4180a"
+    },
+    {
+      "family": "Caveat",
+      "weight": 700,
+      "italic": false,
+      "file": "Caveat-Bold.ttf",
+      "source": "https://fonts.gstatic.com/s/caveat/v23/WnznHAc5bAfYB2QRah7pcpNvOx-pjRV6SII.ttf",
+      "sha256": "f4365d9874c1b64026aca48786cf835a5decf2c740c06de04dbb05ce8c93ff37"
+    },
+    {
+      "family": "DM Sans",
+      "weight": 400,
+      "italic": true,
+      "file": "DMSans-Italic.ttf",
+      "source": "https://fonts.gstatic.com/s/dmsans/v17/rP2rp2ywxg089UriCZaSExd86J3t9jz86Mvy4qCRAL19DksVat-JDW3z.ttf",
+      "sha256": "cb30796ef338a70498e301f2c333f00d4fc23bacfa267be09673fdac43356a96"
+    },
+    {
+      "family": "DM Sans",
+      "weight": 700,
+      "italic": true,
+      "file": "DMSans-BoldItalic.ttf",
+      "source": "https://fonts.gstatic.com/s/dmsans/v17/rP2rp2ywxg089UriCZaSExd86J3t9jz86Mvy4qCRAL19DksVat9uCm3z.ttf",
+      "sha256": "928953e78cf66c433f9de6911079719dfb124154addbe4575f45912cfaac3b34"
+    },
+    {
+      "family": "DM Sans",
+      "weight": 400,
+      "italic": false,
+      "file": "DMSans-Regular.ttf",
+      "source": "https://fonts.gstatic.com/s/dmsans/v17/rP2tp2ywxg089UriI5-g4vlH9VoD8CmcqZG40F9JadbnoEwAopxhTg.ttf",
+      "sha256": "b0ae3e89a7d3ef2b1838bb4b1ceb0b17cc3435af061eee809d76aa623ff116e9"
+    },
+    {
+      "family": "DM Sans",
+      "weight": 700,
+      "italic": false,
+      "file": "DMSans-Bold.ttf",
+      "source": "https://fonts.gstatic.com/s/dmsans/v17/rP2tp2ywxg089UriI5-g4vlH9VoD8CmcqZG40F9JadbnoEwARZthTg.ttf",
+      "sha256": "2a8e7f713ee79fbccdef3cef5c787aff47580299f7da60144961e7db2ec08211"
+    },
+    {
+      "family": "DM Serif Display",
+      "weight": 400,
+      "italic": true,
+      "file": "DMSerifDisplay-Italic.ttf",
+      "source": "https://fonts.gstatic.com/s/dmserifdisplay/v17/-nFhOHM81r4j6k0gjAW3mujVU2B2G_Vx1w.ttf",
+      "sha256": "0ab2fcacedaafc0a7536453d4a763f131ba83a636706d3ec2d685cf04478a920"
+    },
+    {
+      "family": "DM Serif Display",
+      "weight": 400,
+      "italic": false,
+      "file": "DMSerifDisplay-Regular.ttf",
+      "source": "https://fonts.gstatic.com/s/dmserifdisplay/v17/-nFnOHM81r4j6k0gjAW3mujVU2B2K_c.ttf",
+      "sha256": "c03775f8cc3db88cfea259b231abe13f94e6a3d3cb01c09477a2e42a1f5919e1"
+    },
+    {
+      "family": "Lobster",
+      "weight": 400,
+      "italic": false,
+      "file": "Lobster-Regular.ttf",
+      "source": "https://fonts.gstatic.com/s/lobster/v32/neILzCirqoswsqX9_oU.ttf",
+      "sha256": "dfdc22543e8a5188aa6d774aa2e9a1f3c9cb363dc814ba1e919ac9e379daec03"
+    },
+    {
+      "family": "Playfair Display",
+      "weight": 400,
+      "italic": true,
+      "file": "PlayfairDisplay-Italic.ttf",
+      "source": "https://fonts.gstatic.com/s/playfairdisplay/v40/nuFRD-vYSZviVYUb_rj3ij__anPXDTnCjmHKM4nYO7KN_qiTbtY.ttf",
+      "sha256": "6021680663c58b344d8404c289c755aadc662a02189ffe4f5ca79378f9e97840"
+    },
+    {
+      "family": "Playfair Display",
+      "weight": 700,
+      "italic": true,
+      "file": "PlayfairDisplay-BoldItalic.ttf",
+      "source": "https://fonts.gstatic.com/s/playfairdisplay/v40/nuFRD-vYSZviVYUb_rj3ij__anPXDTnCjmHKM4nYO7KN_k-UbtY.ttf",
+      "sha256": "954e20ee10ae685d0a5a6e6ee380165ea9c8eb329c0e22a58739496714f66991"
+    },
+    {
+      "family": "Playfair Display",
+      "weight": 400,
+      "italic": false,
+      "file": "PlayfairDisplay-Regular.ttf",
+      "source": "https://fonts.gstatic.com/s/playfairdisplay/v40/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKdFvUDQ.ttf",
+      "sha256": "1609a54fa3ad1abc8d0037132f73700333241ea0b65672079998e352f151dea7"
+    },
+    {
+      "family": "Playfair Display",
+      "weight": 700,
+      "italic": false,
+      "file": "PlayfairDisplay-Bold.ttf",
+      "source": "https://fonts.gstatic.com/s/playfairdisplay/v40/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKeiukDQ.ttf",
+      "sha256": "adefc53e7b3d483f1fa5e85edd82b7689ca79db25a1f6786bd7949cdcfeec601"
+    },
+    {
+      "family": "Righteous",
+      "weight": 400,
+      "italic": false,
+      "file": "Righteous-Regular.ttf",
+      "source": "https://fonts.gstatic.com/s/righteous/v18/1cXxaUPXBpj2rGoU7C9mjw.ttf",
+      "sha256": "82e2ac84900128219615a1e3a986a1821409e727e2bdb67714b2dcfe4447b946"
+    },
+    {
+      "family": "Space Grotesk",
+      "weight": 400,
+      "italic": false,
+      "file": "SpaceGrotesk-Regular.ttf",
+      "source": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf",
+      "sha256": "ec926d5065eaca49a48f96e312bbae0bbc5733c24215cf5dfabbdccee926fef7"
+    },
+    {
+      "family": "Space Grotesk",
+      "weight": 700,
+      "italic": false,
+      "file": "SpaceGrotesk-Bold.ttf",
+      "source": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf",
+      "sha256": "3e756954468ff1cb302dae0414262e72f76a67d87bef3fa1f3226cd0fb9b2d85"
+    }
+  ]
+}

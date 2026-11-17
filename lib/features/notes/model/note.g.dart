@@ -23,13 +23,16 @@ class NoteAdapter extends TypeAdapter<Note> {
       timestamp: fields[3] as DateTime,
       color: fields[4] as int,
       isLocked: fields[5] as bool,
+      richText: fields[6] as String?,
+      paper: fields[7] as String?,
+      media: fields[8] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Note obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -41,7 +44,13 @@ class NoteAdapter extends TypeAdapter<Note> {
       ..writeByte(4)
       ..write(obj.color)
       ..writeByte(5)
-      ..write(obj.isLocked);
+      ..write(obj.isLocked)
+      ..writeByte(6)
+      ..write(obj.richText)
+      ..writeByte(7)
+      ..write(obj.paper)
+      ..writeByte(8)
+      ..write(obj.media);
   }
 
   @override
