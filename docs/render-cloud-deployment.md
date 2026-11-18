@@ -1,6 +1,8 @@
 # Render deployment for note backup and sync
 
-Prepared on 2026-11-17; no Render service has been created or deployed.
+Prepared on 2026-11-17; source published on 2026-11-18 to
+`codex/cloud-backup-sync` (implementation commit `ec5b085`). No Render service
+has been created or deployed.
 The root `render.yaml` defines one Docker web service, using the existing
 `server/Dockerfile.cloud`. It does not deploy Gemini or PIN recovery.
 
@@ -28,12 +30,16 @@ The root `render.yaml` defines one Docker web service, using the existing
 4. Create its service-account key only after approval. Keep it out of Git,
    chat and the APK. Render needs the JSON as a secret file named
    `firebase-cloud-service-account.json`; ADC reads `/etc/secrets/...`.
-5. The implementation and Blueprint must be committed and pushed before
-   Render can build them. The current local changes have not been pushed.
+5. The implementation and Blueprint are pushed to `codex/cloud-backup-sync`.
+   Select this branch when creating the Render Blueprint; `main` does not yet
+   contain these changes.
 
 ## Render setup
 
-Connect the JotIt GitHub repository and create a Blueprint from `render.yaml`.
+Connect the JotIt GitHub repository, select `codex/cloud-backup-sync`, and create
+a Blueprint from `render.yaml`. Render Google sign-in reported no existing
+account for `zaleltechltd@gmail.com`; account creation/terms acceptance is pending
+owner approval, along with backend IAM/key creation and secret transfer.
 Review the single Free web service before deploying. Auto-deploy is disabled
 so future repository pushes do not automatically release this backend.
 
