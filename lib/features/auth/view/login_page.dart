@@ -25,7 +25,7 @@ class LoginPage extends StatelessWidget {
         title: const Text('Sign out of JotIt?'),
         content: const SingleChildScrollView(
           child: Text(
-            'Your notes and attachments will stay on this device. App Lock and your shared note PIN will stay unchanged. Signing out does not delete local data or hide it from another account on this device.',
+            'Cloud sync will pause. Your notes and attachments will stay on this device. App Lock and your shared note PIN will stay unchanged. Signing out does not delete local data or hide it from another account on this device.',
           ),
         ),
         actions: [
@@ -174,7 +174,7 @@ class LoginPage extends StatelessWidget {
                   const SizedBox(height: 24),
                   const QuietMessage(
                     child: Text(
-                      'Verified-email PIN recovery and cloud sync are planned, not enabled. Signing in does not back up notes or recover a forgotten note PIN in this version. Notes belong to this device: signing in or out does not move, upload or delete them.',
+                      'Signing in alone does not connect cloud backup. PIN recovery is not enabled automatically; it requires separate enrollment and a configured service. Backup & sync also needs a configured service and explicit connection in Settings. Signing in to an already connected account lets sync resume; signing out pauses sync and keeps local notes on this device.',
                     ),
                   ),
                 ],

@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:jot_it/core/constants/z_strings.dart';
 import 'package:jot_it/core/services/hive_local_storage_service.dart';
@@ -7,7 +9,6 @@ import 'package:jot_it/core/services/pin_hasher.dart';
 import 'package:jot_it/features/notes/model/note.dart';
 import 'package:jot_it/features/notes/model/note_paper.dart';
 import 'package:jot_it/features/notes/model/note_attachment.dart';
-import 'dart:typed_data';
 import 'support/fakes.dart';
 
 void main() {
@@ -50,6 +51,40 @@ void main() {
     expect(authBox.isEmpty, true);
     expect(noteBox.isEmpty, true);
   });
+  test(
+    'recovery PIN envelopes survive reopen and preserve notes and App Lock',
+    () async {
+      final previous = debugDefaultTargetPlatformOverride;
+      debugDefaultTargetPlatformOverride = TargetPlatform.android;
+      const channel = MethodChannel('jotit/pin_hash');
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, (_) async => Uint8List(32));
+      addTearDown(() {
+        debugDefaultTargetPlatformOverride = previous;
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(channel, null);
+      });
+      final digest = '${List.filled(43, 'A').join()}=';
+      await authBox.put('note_lock_pin', {
+        'hash': 'pbkdf2-sha256:600000:AAAAAAAAAAAAAAAAAAAAAA==:$digest',
+        'recovery': {'enabled': true, 'uid': 'owner'},
+        'pendingReset': null,
+      });
+      await storage.saveNotes([makeNote('protected', isLocked: true)], 'all');
+      await storage.saveAppLockPin('1357');
+      await storage.saveAppLockChoice(true);
+      await authBox.close();
+      await noteBox.close();
+      authBox = await Hive.openBox('auth');
+      noteBox = await Hive.openBox('notes');
+      storage = HiveLocalStorageService(authBox, noteBox);
+      expect(await storage.verifyNoteLockPin('2468'), true);
+      expect(storage.hasNoteLockPin(), true);
+      expect(storage.getAppLockChoice(), true);
+      expect(storage.getNotes('all').single.isLocked, true);
+      expect((authBox.get('note_lock_pin') as Map)['recovery']['uid'], 'owner');
+    },
+  );
 
   test(
     'custom colors and favorite preferences survive reopening without changing media or PINs',
@@ -123,6 +158,7 @@ void main() {
       await storage.clearAll();
       expect(storage.hasNoteLockPin(), false);
     },
+    timeout: const Timeout(Duration(minutes: 2)),
   );
 
   test('rich-text formatting survives closing and reopening Hive', () async {

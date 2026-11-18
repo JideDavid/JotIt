@@ -259,7 +259,8 @@ void main() {
       expect(notes.needsNoteUnlock, true);
       expect(find.byType(NotePage), findsNothing);
       expect(find.text('Hidden text'), findsNothing);
-      expect(find.widgetWithText(TextButton, 'Unlock note'), findsOneWidget);
+      expect(find.widgetWithText(TextField, 'Note PIN'), findsOneWidget);
+      expect(find.text('This note is locked'), findsOneWidget);
     });
   });
 }

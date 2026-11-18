@@ -247,7 +247,7 @@ void main() {
         await tester.pumpAndSettle();
         expect(
           tester
-              .getBottomLeft(find.textContaining('Notes are currently stored'))
+              .getBottomLeft(find.textContaining('Local notes work offline'))
               .dy,
           lessThanOrEqualTo(safeBottom),
         );

@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import '../../view-model/note_view_model.dart';
 import '../../../../shared/widgets/quiet_chrome.dart';
 import '../../../../core/theme/theme.dart';
+import '../../../auth/services/note_pin_recovery.dart';
+import '../../../auth/view/note_pin_recovery_page.dart';
 
 Future<bool> showNotePinPrompt(
   BuildContext context, {
@@ -126,6 +128,7 @@ class _NotePinPromptState extends State<NotePinPrompt> {
 
   @override
   Widget build(BuildContext context) {
+    final recovery = context.watch<NotePinRecovery?>();
     if (widget.fullPage) {
       final theme = Theme.of(context);
       return PopScope(
@@ -217,9 +220,24 @@ class _NotePinPromptState extends State<NotePinPrompt> {
                         ),
                       ),
                     const SizedBox(height: 20),
+                    if (!_settingPin &&
+                        recovery?.configured == true &&
+                        recovery!.linked)
+                      TextButton(
+                        onPressed: _busy
+                            ? null
+                            : () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      NotePinRecoveryPage(recovery: recovery),
+                                ),
+                              ),
+                        child: const Text('Forgot note PIN?'),
+                      ),
                     const QuietMessage(
                       child: Text(
-                        'Your shared note PIN is separate from App Lock. Verified-email PIN recovery is planned and unavailable in this version. Keep your PIN safe.',
+                        'Your shared note PIN is separate from App Lock. Recovery requires prior enrollment on this installation. If you have not linked recovery, keep your PIN safe.',
                       ),
                     ),
                   ],
@@ -248,7 +266,7 @@ class _NotePinPromptState extends State<NotePinPrompt> {
               const SizedBox(height: 16),
               Text(
                 _settingPin
-                    ? 'This four-digit PIN protects all locked notes, independently of App Lock. Keep it safe: there is no PIN recovery.'
+                    ? 'This four-digit PIN protects all locked notes, independently of App Lock. After setting it, enroll in Recovery email in Settings if recovery is configured. Otherwise, keep it safe: a forgotten PIN cannot be recovered.'
                     : 'Enter your shared note PIN to continue.',
               ),
               const SizedBox(height: 20),

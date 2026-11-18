@@ -8,6 +8,7 @@ import '../model/note_text_style.dart';
 import '../model/note_ai_appearance.dart';
 import 'firebase_note_ai.dart';
 import 'gemini_anchors.dart';
+import 'note_ai_request.dart';
 
 class NoteAiService {
   NoteAiService({
@@ -15,11 +16,13 @@ class NoteAiService {
     http.Client? client,
     this.endpoint = const String.fromEnvironment('JOTIT_AI_URL'),
     this.firebaseGenerate,
+    this.requestTimeout = const Duration(seconds: 60),
   }) : _client = client ?? http.Client();
   final Future<String?> Function() token;
   final String endpoint;
   final http.Client _client;
   final Future<String> Function(Map<String, dynamic>)? firebaseGenerate;
+  final Duration requestTimeout;
   bool get configured =>
       endpoint.isNotEmpty ||
       firebaseGenerate != null ||
@@ -31,6 +34,50 @@ class NoteAiService {
     List<Map<String, dynamic>> structure = const [],
     NoteAiAppearance? appearance,
     String scope = 'whole',
+    NoteAiCancellation? cancellation,
+    void Function(NoteAiStage)? onStage,
+  }) async {
+    final request = cancellation ?? NoteAiCancellation();
+    void report(NoteAiStage stage) {
+      request.check();
+      onStage?.call(stage);
+      request.check();
+    }
+
+    request.check();
+    try {
+      return await request
+          .wait(
+            _generate(
+              mode: mode,
+              prompt: prompt,
+              text: text,
+              structure: structure,
+              appearance: appearance,
+              scope: scope,
+              report: report,
+            ),
+          )
+          .timeout(requestTimeout);
+    } on TimeoutException {
+      request.cancel();
+      throw const FormatException(
+        'Gemini took too long. Your note and any previous preview are unchanged. Try again, or select a smaller section of a long note.',
+      );
+    } finally {
+      // Release the cancellation listener when the operation has finished.
+      if (cancellation == null) request.cancel();
+    }
+  }
+
+  Future<NoteAiPlan> _generate({
+    required String mode,
+    required String prompt,
+    required String text,
+    List<Map<String, dynamic>> structure = const [],
+    NoteAiAppearance? appearance,
+    String scope = 'whole',
+    required void Function(NoteAiStage) report,
   }) async {
     final uri = Uri.tryParse(endpoint);
     final local =
@@ -51,12 +98,21 @@ class NoteAiService {
         'Use a shorter prompt or select a smaller part of the note.',
       );
     }
-    final auth = await token();
+    report(NoteAiStage.checkingSession);
+    String? auth;
+    try {
+      auth = await token();
+    } catch (_) {
+      throw const FormatException(
+        'Could not verify your AI session. Check your connection and try again.',
+      );
+    }
     if (auth == null || auth.isEmpty) {
       throw const FormatException(
         'Sign in to your account to use Gemini assistance.',
       );
     }
+    report(NoteAiStage.generating);
     if (endpoint.isEmpty) {
       try {
         final paragraphs = GeminiAnchors.paragraphs(text, structure)
@@ -103,6 +159,7 @@ class NoteAiService {
           final result = await (firebaseGenerate ?? FirebaseNoteAi.generate)(
             input,
           ).timeout(remaining);
+          report(NoteAiStage.checkingProposal);
           try {
             if (utf8.encode(result).length > 200000) {
               throw const FormatException(
@@ -119,7 +176,7 @@ class NoteAiService {
           } on FormatException catch (error) {
             if (attempt == 1) {
               throw const FormatException(
-                'Gemini could not produce a valid editing proposal after a correction attempt. Your note is unchanged; try a smaller selection or simpler request.',
+                'Gemini returned edits that could not be applied safely, even after a correction. Your note and any previous preview are unchanged. Try a smaller selection, or ask for one change at a time.',
               );
             }
             // Send bounded validation guidance, never raw exception sources,
@@ -136,9 +193,12 @@ class NoteAiService {
                 'every sticker and doodle block requires formatId. Keep at most three accent colors. '
                 '${mode == 'Format' ? 'Preserve all existing wording.' : 'Use insert edits to add new content, including on empty paragraphs.'} '
                 'Preserve existing links and objects.';
+            report(NoteAiStage.correcting);
           }
         }
         throw const FormatException('Gemini did not return a valid proposal.');
+      } on NoteAiCancelled {
+        rethrow;
       } on TimeoutException {
         throw const FormatException(
           'Gemini took too long. Your note is unchanged; try again.',
@@ -197,6 +257,7 @@ class NoteAiService {
         'Could not reach Gemini. Check your connection and try again.',
       );
     }
+    report(NoteAiStage.checkingProposal);
     if (response.statusCode == 429) {
       throw const FormatException(
         'Gemini’s free-tier quota is temporarily reached. Wait and try again.',

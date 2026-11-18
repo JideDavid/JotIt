@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -103,11 +104,13 @@ void main() {
       setBodyText(notes.bodyController, 'My words');
       final original = notes.bodyController.document.toDelta();
       var requests = 0;
+      Completer<http.Response>? delayedFollowUp;
       final service = NoteAiService(
         endpoint: 'https://ai.example.test/v1/assist',
         token: () async => 'token',
         client: MockClient((r) async {
           requests++;
+          if (delayedFollowUp != null) return delayedFollowUp.future;
           return http.Response(
             jsonEncode({
               ...plan([
@@ -188,6 +191,21 @@ void main() {
       await tester.tap(find.text('Update preview'));
       await tester.pumpAndSettle();
       expect(requests, 2);
+      expect(tester.takeException(), isNull);
+      delayedFollowUp = Completer<http.Response>();
+      await tester.enterText(find.byType(TextField), 'Add another detail');
+      await tester.tap(find.text('Update preview'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(find.text('Gemini is preparing your changes…'), findsOneWidget);
+      await tester.tap(find.text('Stop waiting'));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('Stopped waiting.'), findsOneWidget);
+      expect(find.text('Proposed'), findsOneWidget);
+      expect(notes.bodyController.document.toDelta(), original);
+      delayedFollowUp.complete(http.Response('{}', 200));
+      await tester.pumpAndSettle();
+      expect(requests, 3);
       expect(tester.takeException(), isNull);
       await tester.tap(find.text('Apply'));
       await tester.pumpAndSettle();

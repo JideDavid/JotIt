@@ -13,3 +13,11 @@ flutter test test/pin_hasher_test.dart test/auth_view_model_test.dart test/pin_a
 ```
 
 Desktop compatibility tests do not establish mobile latency. After installing the release, measure from the fourth PIN digit to unlock on the target phone, for both a correct and incorrect PIN. Check responsiveness, background/relock behavior, and the existing wrong-attempt cooldown. Never record or expose the real PIN while measuring.
+
+For repeatable native timings without using saved credentials, run the separate target:
+
+```powershell
+flutter run --profile -t tool/pin_benchmark.dart
+```
+
+Tap Run benchmark. It creates an ephemeral synthetic hash and measures five correct and five incorrect verifications, showing the median and slowest times. It does not access storage or print PINs, salts or hashes. Run the normal `lib/main.dart` target afterward to return to JotIt. This is a separate developer target; it is not included in the normal app's navigation. These numbers cover derivation/channel/comparison, while fourth-digit-to-unlock timing must still be checked in the normal app for App Lock and note locks. Redmi timing remains pending a working ADB connection.

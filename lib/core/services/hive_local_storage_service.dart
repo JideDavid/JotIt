@@ -5,12 +5,37 @@ import '../constants/z_strings.dart';
 import '../utils/l_printer.dart';
 import 'local_storage_service.dart';
 import 'pin_hasher.dart';
+import 'note_pin_record.dart';
 import '../../features/notes/model/note_card_color.dart';
 
 class HiveLocalStorageService implements LocalStorageService {
   static const _noteLockPinKey = 'note_lock_pin';
   final Box _authBox;
   final Box _noteBox;
+  Future<void> _noteWrites = Future<void>.value();
+  void Function()? onNotesChanged;
+
+  Map<String, dynamic> readNoteEnvelope(String key) {
+    final raw = _noteBox.get(key);
+    return raw is Map
+        ? Map<String, dynamic>.from(raw)
+        : {'notes': List<Note>.from(raw as List? ?? const [])};
+  }
+
+  /// Local edits and sync acknowledgement share one queue and one Hive record.
+  /// A failed disk write cannot advance only the sync baseline.
+  Future<void> updateNoteEnvelope(
+    String key,
+    Map<String, dynamic> Function(Map<String, dynamic>) update,
+  ) {
+    final write = _noteWrites.then((_) async {
+      final record = update(readNoteEnvelope(key));
+      await _noteBox.put(key, record);
+      if (key == 'all') onNotesChanged?.call();
+    });
+    _noteWrites = write.catchError((Object _) {});
+    return write;
+  }
 
   HiveLocalStorageService(this._authBox, this._noteBox);
 
@@ -95,20 +120,23 @@ class HiveLocalStorageService implements LocalStorageService {
 
   @override
   Future<void> saveNotes(List<Note> notes, key) async {
-    await _noteBox.put(key, List<Note>.of(notes));
+    await updateNoteEnvelope(
+      key,
+      (record) => {...record, 'notes': List<Note>.of(notes)},
+    );
     ZPrint("Notes saved to local db");
   }
 
   @override
   List<Note> getNotes(String key) {
-    final notes = List<Note>.from(_noteBox.get(key, defaultValue: []) as List);
+    final notes = List<Note>.from(readNoteEnvelope(key)['notes'] as List);
     ZPrint("Notes retrieved from local db: ${notes.length}");
     return notes;
   }
 
   @override
   Future<void> deleteNotes(String key) async {
-    await _noteBox.delete(key);
+    await updateNoteEnvelope(key, (record) => {...record, 'notes': <Note>[]});
     ZPrint("Notes deleted from local db");
   }
 
@@ -195,7 +223,7 @@ class HiveLocalStorageService implements LocalStorageService {
 
   @override
   Future<bool> verifyNoteLockPin(String pin) async {
-    final encoded = _authBox.get(_noteLockPinKey, defaultValue: '') as String;
+    final encoded = notePinHash(_authBox.get(_noteLockPinKey));
     return PinHasher().verify(pin, encoded);
   }
 }

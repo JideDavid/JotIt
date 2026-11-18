@@ -1,0 +1,30 @@
+# Credentials are provided in Render, never committed here.
+services:
+  - type: web
+    name: jotit-note-cloud
+    runtime: docker
+    plan: free
+    region: frankfurt
+    dockerfilePath: ./server/Dockerfile.cloud
+    dockerContext: ./server
+    healthCheckPath: /health
+    autoDeployTrigger: "off"
+    envVars:
+      - key: HOST
+        value: 0.0.0.0
+      - key: CLOUD_PORT
+        value: "10000"
+      - key: FIREBASE_PROJECT_ID
+        value: jotit-ab937
+      - key: GOOGLE_APPLICATION_CREDENTIALS
+        value: /etc/secrets/firebase-cloud-service-account.json
+      - key: CLOUD_APP_IDS
+        sync: false
+      - key: R2_ACCOUNT_ID
+        value: 18b015d8276f786bbf04d9317a069fc5
+      - key: R2_BUCKET
+        value: jotit-private
+      - key: R2_ACCESS_KEY_ID
+        sync: false
+      - key: R2_SECRET_ACCESS_KEY
+        sync: false

@@ -8,6 +8,17 @@ Native note assistance uses Firebase AI Logic with App Check. See the
 signing fingerprints and release testing. No Gemini key or local computer is
 required by the Firebase release build.
 
+Shared note PIN recovery has a configurable email backend and an in-app
+enrollment/reset flow. It stays unavailable until a recovery endpoint and verified
+sender are configured. See the [recovery setup guide](docs/note-pin-recovery.md)
+for activation, deployment and testing requirements.
+
+Cloud backup/restore and cross-device sync have a local implementation with
+explicit account connection, offline saves, conflict copies and 20 retained
+backup revisions. Live use needs a configured private backend and Cloudflare R2
+bucket; Firebase stays on Spark.
+See [cloud backup and sync](docs/cloud-backup-sync.md) for behavior and activation.
+
 ## Development
 
 The project requires Dart 3.11 or later through a compatible Flutter SDK.
@@ -62,8 +73,9 @@ paper settings or PINs, and does not unlock protected content.
 
 Quiet paper uses warm neutral light surfaces, layered charcoal dark surfaces,
 amber actions, and theme-paired note cards. The editor remains bounded on wide
-screens and keeps its formatting rail above the keyboard. Recovery and cloud
-sync are still marked planned; choosing a theme does not enable either feature.
+screens and keeps its formatting rail above the keyboard. Email recovery needs
+a configured service; backup and sync also require separate configuration and
+explicit connection to your account.
 
 ## Reliability behavior
 
@@ -83,15 +95,16 @@ sync are still marked planned; choosing a theme does not enable either feature.
   plaintext PINs migrate after successful verification. PINs and tokens are
   excluded from debug logs. App locking does not encrypt the note database.
 
-Notes are currently stored on the device. Cloud backup and cross-device sync
-are planned separately.
+Notes are stored on the device. A configured and explicitly connected cloud
+service can back up saved notes and sync them to the same account's devices.
 
 ## Individual note locks
 
 Open a note and choose **Note actions → Lock note**. The first lock
 sets a shared four-digit note PIN; later locks use that same PIN. Locking saves
 the current draft. This PIN is independent of App Lock and remains available
-when App Lock is disabled. Keep it safe: PIN recovery is not implemented.
+when App Lock is disabled. Keep it safe: recovery requires prior enrollment and
+a configured recovery service. An unenrolled forgotten PIN cannot be recovered.
 
 Locked cards hide their title and body and do not match searches. Opening or
 deleting a locked note requires the note PIN. To remove protection, unlock the

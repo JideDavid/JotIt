@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../core/theme/appearance_view_model.dart';
 import '../features/auth/view/login_page.dart';
+import '../features/auth/view/note_pin_recovery_page.dart';
+import '../features/auth/services/note_pin_recovery.dart';
 import '../features/auth/view_model/auth_viewmodel.dart';
 import '../features/notes/view-model/note_view_model.dart';
+import '../features/notes/view/note_cloud_page.dart';
+import '../features/notes/services/note_cloud_sync.dart';
 import '../shared/widgets/quiet_chrome.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -16,7 +20,7 @@ class SettingsPage extends StatelessWidget {
       builder: (context) => AlertDialog(
         title: const Text('Shared note PIN'),
         content: const Text(
-          'Open a note and choose Lock note to protect it. One shared PIN protects all locked notes and is separate from App Lock.\n\nVerified-email PIN recovery is planned, but is not available yet. Keep your PIN safe.',
+          'Open a note and choose Lock note to protect it. One shared PIN protects all locked notes and is separate from App Lock.\n\nRecovery requires a configured service and prior enrollment through Recovery email. You need your current note PIN to enroll. Keep it safe if recovery is not linked.',
         ),
         actions: [
           TextButton(
@@ -33,6 +37,8 @@ class SettingsPage extends StatelessWidget {
     final auth = context.watch<AuthViewModel>();
     final appearance = context.watch<AppearanceViewModel>();
     final notes = context.watch<NoteViewModel>();
+    final recovery = context.watch<NotePinRecovery?>();
+    final cloud = context.watch<NoteCloudSync?>();
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
@@ -166,10 +172,43 @@ class SettingsPage extends StatelessWidget {
                   child: Column(
                     children: [
                       ListTile(
+                        leading: const Icon(Icons.cloud_outlined),
+                        title: const Text('Backup & sync'),
+                        subtitle: Text(
+                          cloud?.configured != true
+                              ? 'Unavailable · setup required'
+                              : cloud!.enabled
+                              ? (cloud.matchesAccount
+                                    ? 'Automatic sync on'
+                                    : 'Sign in to the connected account')
+                              : 'Not connected',
+                        ),
+                        trailing: const Icon(Icons.chevron_right),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => NoteCloudPage(cloud: cloud),
+                          ),
+                        ),
+                      ),
+                      const Divider(height: 1, indent: 16, endIndent: 16),
+                      ListTile(
                         leading: const Icon(Icons.mail_outline),
                         title: const Text('Recovery email'),
-                        subtitle: const Text('Planned · not linked'),
-                        onTap: () => _showNoteLockInfo(context),
+                        subtitle: Text(
+                          recovery?.configured != true
+                              ? 'Unavailable · setup required'
+                              : recovery!.matchesAccount
+                              ? 'Linked · ${recovery.maskedEmail}'
+                              : 'Not linked to this account',
+                        ),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                NotePinRecoveryPage(recovery: recovery),
+                          ),
+                        ),
                       ),
                       const Divider(height: 1, indent: 16, endIndent: 16),
                       ListTile(
@@ -193,7 +232,7 @@ class SettingsPage extends StatelessWidget {
                 const SizedBox(height: 14),
                 const QuietMessage(
                   child: Text(
-                    'Notes are currently stored on this device. Cloud backup, cross-device sync, and verified-email PIN recovery are planned. No recovery email is sent by this version.',
+                    'Local notes work offline. Cloud backup and cross-device sync require a configured service and explicit connection to your account. Note PIN recovery requires separate enrollment.',
                   ),
                 ),
               ],

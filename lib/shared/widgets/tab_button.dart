@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../core/constants/colors.dart';
 import '../../core/constants/sizes.dart';
-import '../../core/utils/l_printer.dart';
 
 class TabButton extends StatefulWidget {
   final String title;

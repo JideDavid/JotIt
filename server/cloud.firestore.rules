@@ -1,0 +1,9 @@
+// For a dedicated, server-only database. Review and merge existing rules before
+// deploying to a shared database; overlapping client allow rules must not expose
+// jotitCloudLibraries. Firebase Admin uses IAM and does not use these rules.
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} { allow read, write: if false; }
+  }
+}

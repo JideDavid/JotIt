@@ -19,6 +19,26 @@ void main() {
     );
   });
   tearDown(() => notes.dispose());
+  test(
+    'recovery verification does not unlock notes and reset revokes access without losing drafts',
+    () async {
+      storage.notePin = '1234';
+      final original = makeNote('private', isLocked: true, body: 'Saved');
+      storage.notes = [original];
+      notes.setOpenedNote(original);
+      expect(await notes.verifyNotePinForRecovery('1234'), true);
+      expect(notes.canMoveAttachments, false);
+      expect(await notes.saveNote(), false);
+      expect(await notes.unlockOpenedNote('1234'), true);
+      setBodyText(notes.bodyController, 'Unsaved draft');
+      notes.revokeNotePinSessions();
+      expect(notes.canMoveAttachments, false);
+      expect(await notes.saveNote(), false);
+      expect(notes.bodyController.document.toPlainText(), 'Unsaved draft\n');
+      expect(storage.notes.single, same(original));
+      expect(storage.notes.single.isLocked, true);
+    },
+  );
 
   test(
     'first lock saves the draft and creates one shared PIN for later notes',

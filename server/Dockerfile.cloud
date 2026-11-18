@@ -1,0 +1,9 @@
+FROM node:24-alpine
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev
+COPY cloud-server.mjs note-cloud.mjs r2-cloud-objects.mjs ./
+USER node
+ENV HOST=0.0.0.0 CLOUD_PORT=8789
+EXPOSE 8789
+CMD ["node", "cloud-server.mjs"]

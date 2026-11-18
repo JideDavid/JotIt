@@ -5,3 +5,10 @@
 !package-lock.json
 !server.mjs
 !semantic-plan.mjs
+!Dockerfile.recovery
+!recovery-server.mjs
+!note-pin-recovery.mjs
+!Dockerfile.cloud
+!cloud-server.mjs
+!note-cloud.mjs
+!r2-cloud-objects.mjs

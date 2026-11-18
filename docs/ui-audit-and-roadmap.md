@@ -5,6 +5,20 @@ and locally verified; target-device release checks remain separate.
 
 ## Implementation progress
 
+### Cloud backup and cross-device sync — local implementation (2026-11-17)
+
+Account opt-in, a private Firebase-authenticated/App-Check backend, snapshot
+history, non-destructive restore and offline three-way sync are implemented
+locally. Locked notes are included; PINs remain local. This is account-based
+cloud access, not end-to-end encryption. Hosting, private Storage/Firestore,
+billing approval, retention operations and real two-device verification remain
+activation work. See `cloud-backup-sync.md`. Older planned-status text below is
+historical and does not describe this new implementation.
+
+### Shared note PIN recovery — local implementation (2026-11-17)
+
+Enrollment, reset, unlinking, native PIN envelope migration, and a separate Firebase-authenticated/App-Check-protected recovery backend are implemented and tested locally. Live delivery remains disabled pending HTTPS hosting, server-only Firestore access and a verified email sender. The recovery page reports this configuration state truthfully. See `note-pin-recovery.md` for activation, protocol constraints and test evidence. Earlier recovery sections below record the product plan; they do not imply live email is enabled. App Lock recovery and cloud sync remain separate milestones.
+
 ### Follow-on phase 1: optional account sign-in (2026-11-14)
 
 The account flow now restores the Firebase SDK session, observes user changes,

@@ -7,6 +7,7 @@ import '../../model/note_sticker.dart';
 import '../../model/note_ai_context.dart';
 import '../../model/note_ai_appearance.dart';
 import '../../services/note_ai_service.dart';
+import '../../services/note_ai_request.dart';
 import '../../view-model/note_view_model.dart';
 import 'distressed_highlight.dart';
 import 'note_stickers.dart';
@@ -34,6 +35,9 @@ class _NoteAiWorkspaceState extends State<NoteAiWorkspace> {
   AuthViewModel? _auth;
   String _mode = 'Format', _scope = 'Whole note';
   String? _error, _summary;
+  String? _notice;
+  NoteAiStage? _stage;
+  NoteAiCancellation? _request;
   List<String> _warnings = const [], _changes = const [];
   String _design = '';
   String _title = '';
@@ -72,6 +76,7 @@ class _NoteAiWorkspaceState extends State<NoteAiWorkspace> {
       identical(_document, widget.notes.bodyController.document);
   void _privacyChanged() {
     if (!_allowed) {
+      _request?.cancel();
       _generation++;
       if (mounted) {
         setState(() {
@@ -89,6 +94,7 @@ class _NoteAiWorkspaceState extends State<NoteAiWorkspace> {
     _changes = const [];
     _design = '';
     _error = null;
+    _notice = null;
     final previous = _preview;
     _preview = null;
     WidgetsBinding.instance.addPostFrameCallback((_) => previous?.dispose());
@@ -98,6 +104,8 @@ class _NoteAiWorkspaceState extends State<NoteAiWorkspace> {
     if (_busy || !_allowed || _prompt.text.trim().isEmpty) return;
     FocusScope.of(context).unfocus();
     final generation = ++_generation;
+    final request = NoteAiCancellation();
+    _request = request;
     final newNote = _scope == 'New note';
     final base = _proposed ?? (newNote ? (Delta()..insert('\n')) : _original);
     final source = Document.fromDelta(base);
@@ -115,6 +123,8 @@ class _NoteAiWorkspaceState extends State<NoteAiWorkspace> {
     setState(() {
       _busy = true;
       _error = null;
+      _notice = null;
+      _stage = NoteAiStage.checkingSession;
     });
     try {
       final theme = Theme.of(context);
@@ -134,6 +144,12 @@ class _NoteAiWorkspaceState extends State<NoteAiWorkspace> {
           'Add to note': 'append',
           'New note': 'new',
         })[_scope]!,
+        cancellation: request,
+        onStage: (stage) {
+          if (mounted && generation == _generation && _allowed) {
+            setState(() => _stage = stage);
+          }
+        },
       );
       if (!mounted || generation != _generation || !_allowed) return;
       if (_scope == 'Add to note' &&
@@ -172,6 +188,8 @@ class _NoteAiWorkspaceState extends State<NoteAiWorkspace> {
       });
       // Keep the old controller alive until its editor has left the tree.
       WidgetsBinding.instance.addPostFrameCallback((_) => previous?.dispose());
+    } on NoteAiCancelled {
+      // A stopped, closed or locked workspace never accepts late results.
     } on FormatException catch (error) {
       if (mounted && generation == _generation) {
         setState(() => _error = error.message);
@@ -184,9 +202,29 @@ class _NoteAiWorkspaceState extends State<NoteAiWorkspace> {
         );
       }
     } finally {
+      request.cancel();
       if (mounted && generation == _generation) setState(() => _busy = false);
     }
   }
+
+  void _stopWaiting() {
+    _request?.cancel();
+    _generation++;
+    setState(() {
+      _busy = false;
+      _stage = null;
+      _notice =
+          'Stopped waiting. Your note and any previous preview are unchanged.';
+    });
+  }
+
+  String get _progressLabel => switch (_stage) {
+    NoteAiStage.checkingSession => 'Checking your AI session…',
+    NoteAiStage.generating => 'Gemini is preparing your changes…',
+    NoteAiStage.checkingProposal => 'Checking the proposed edits…',
+    NoteAiStage.correcting => 'Gemini is correcting the proposal…',
+    null => 'Preparing…',
+  };
 
   Future<void> _apply() async {
     final proposed = _proposed;
@@ -486,7 +524,21 @@ class _NoteAiWorkspaceState extends State<NoteAiWorkspace> {
                         ),
                       ),
                     ),
-                  if (_busy) const LinearProgressIndicator(),
+                  if (_notice != null)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                      child: Semantics(liveRegion: true, child: Text(_notice!)),
+                    ),
+                  if (_busy) ...[
+                    const LinearProgressIndicator(),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                      child: Semantics(
+                        liveRegion: true,
+                        child: Text(_progressLabel),
+                      ),
+                    ),
+                  ],
                   Padding(
                     padding: const EdgeInsets.all(12),
                     child: Column(
@@ -529,6 +581,11 @@ class _NoteAiWorkspaceState extends State<NoteAiWorkspace> {
                                     : 'Update preview',
                               ),
                             ),
+                            if (_busy)
+                              TextButton(
+                                onPressed: _stopWaiting,
+                                child: const Text('Stop waiting'),
+                              ),
                             if (_proposed != null)
                               FilledButton(
                                 onPressed: _busy ? null : _apply,
@@ -554,6 +611,7 @@ class _NoteAiWorkspaceState extends State<NoteAiWorkspace> {
 
   @override
   void dispose() {
+    _request?.cancel();
     _generation++;
     widget.notes.removeListener(_privacyChanged);
     _auth?.removeListener(_privacyChanged);

@@ -44,10 +44,27 @@ class NoteViewModel extends ChangeNotifier {
   Note? get openedNote => _openedNote;
 
   bool _editorActive = false;
+  bool get cloudCanSync =>
+      !_disposed &&
+      _foreground &&
+      !_editorActive &&
+      !_isSaving &&
+      !_changingNoteLock &&
+      !_loadFailed;
   bool _openedNoteUnlocked = false;
   bool get needsNoteUnlock =>
       _editorActive && (_openedNote?.isLocked ?? false) && !_openedNoteUnlocked;
   bool get hasNoteLockPin => _notesRepo.hasNoteLockPin;
+  Future<bool> verifyNotePinForRecovery(String pin) =>
+      _authenticateNotePin(pin, allowSetup: false);
+  void revokeNotePinSessions() {
+    _lockGeneration++;
+    _openedNoteUnlocked = false;
+    _failedPinAttempts = 0;
+    _pinRetryAt = null;
+    if (!_disposed) notifyListeners();
+  }
+
   bool _changingNoteLock = false;
   bool get changingNoteLock => _changingNoteLock;
   bool _verifyingNotePin = false;
